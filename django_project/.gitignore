@@ -1,0 +1,5 @@
+settings.py 
+settings.py.orig
+wsgi.py
+static/sammytheshark.gif
+__pycache__/*
