@@ -133,7 +133,7 @@ for day in range(D):
                         (df_infectious['x'] == person['x']) |
                         (df_infectious['x'] == person['x'] - 1) |
                         (df_infectious['x'] == person['x'] + 1)
-                        ]
+                        ] #TODO
                     if not df_x.empty:
                         df_y = df_x.loc[
                             (df_infectious['y'] == person['y']) |
