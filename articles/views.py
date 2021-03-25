@@ -31,6 +31,8 @@ class ArticleDetail(generic.DetailView):
 def predict_number(request, *args, **kwargs):
     
     if request.method == 'POST':
+
+        population = request.post.get('population')
         print(request)
 
         df = simulate()

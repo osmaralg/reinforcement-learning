@@ -1,12 +1,12 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
 <div class="container">
 <div class="row">
     
 
-    <div id="canvas">Click to draw<br/></div>
+
     <div class="col-sm-6">
         <p> Dynamic Graph</p>
 <canvas id="myChart"  height="200px" style="width: 200px; height: 200px"></canvas>
@@ -114,6 +114,16 @@ function sendInfo(){
     chart.data.datasets[0].pointBackgroundColor = data.colors
     console.log(chart.data)
     chart.update()
+  });
+
+    $.post("{% url 'predict' %}",
+  {
+    csrfmiddlewaretoken: "{{ csrf_token }}",
+    popolutation: $(#inputelement).value,
+   
+  },
+  function(data){
+
   });
 }
 </script>
