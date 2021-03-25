@@ -119,7 +119,7 @@ function sendInfo(){
     $.post("{% url 'predict' %}",
   {
     csrfmiddlewaretoken: "{{ csrf_token }}",
-    popolutation: $(#inputelement).value,
+    popolutation: 10,
    
   },
   function(data){
