@@ -3,14 +3,14 @@
 import pandas as pd
 import numpy as np
 import random
-import time
+#import time
 import datetime
 
 # %%
 
 # Inputs
 s = 250  # size of the grid
-N = 10000  # size of population
+N = 1000  # size of population
 M = round(N * .007)  # Number of infectious population
 Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
@@ -51,36 +51,37 @@ df['y'] = np.random.randint(0, s, size=len(df))
 
 # %%
 
-KPIs = ['Active Cases', 'Newly Infected', 'Cured Cases', 'Death Cases', 'Reproduction Rate', 'Economy',
-        'Current Movement Restriction']
-KPI_df = pd.DataFrame(columns=KPIs)
-KPI_df = KPI_df.fillna(0)
-KPI_df.loc[0, 'Active Cases'] = I
-KPI_df.loc[0, 'Newly Infected'] = df.loc[df['Infectious'] == 1].Infectious.count()
-KPI_df.loc[0, 'Cured Cases'] = 0
-KPI_df.loc[0, 'Death Cases'] = 0
-KPI_df.loc[0, 'Reproduction Rate'] = df.loc[df['Infectious'] == 1].Infectious.count()
-KPI_df.loc[0, 'Economy'] = Economy
-KPI_df.loc[0, 'Current Movement Restriction'] = 0
-
+KPI_df = pd.DataFrame(columns = ['Active Cases', 'Newly Infected', 'Cured Cases', 'Death Cases', 'Reproduction Rate', 'Economy',
+        'Current Movement Restriction'])
+initial = []
+initial.insert(0, {'Active Cases': I, 
+                 'Newly Infected': df.loc[df['Infectious'] == 1].Infectious.count(),
+                 'Cured Cases': 0,
+                 'Death Cases': 0,
+                 'Reproduction Rate':  df.loc[df['Infectious'] == 1].Infectious.count(),
+                 #'Reproduction Rate':  df[df.assign(key=df.Infectious == 1).groupby(['Infectious']).key.transform('any')].Infectious.sum(),
+                 'Economy': Economy,
+                 'Current Movement Restriction':0                 
+                 })
+KPI_df = pd.concat([pd.DataFrame(initial), KPI_df])
 # %%
 
-print("done")
+#print("done")
 df_infectious = df.loc[(df['Infectious'] > 0)]
 df_infectious = df_infectious[['x', 'y']]
 # %%
 
-print("example")
+#print("example")
 # ['x','y','Day','Susceptible','Exposed','Infectious','Recovered','GG']
 # ['x','y','Day','Susceptible','Exposed','Infectious','Recovered','GG']
 for day in range(D):
-    print("day", day)
+    #print("day", day)
     Economy = 0  # Economy per day
     for mt in range(Mt):
-        print("movement", mt)
+        #print("movement", mt)
         start = datetime.datetime.now()
 
-        for index, person in df.iterrows():
+        for index, person in df.iterrows(): #another way to do this?
 
             if not person['GG']:  # If the person is not dead
 
@@ -93,7 +94,7 @@ for day in range(D):
                 df.iat[index, 0] = person['x']
                 df.iat[index, 1] = person['y']
 
-                if index in df_infectious.index:
+                if index in df_infectious.index: #assigning whats in person (row) to df_infectious at the correct index
                     df_infectious.at[index, 'x'] = person['x']
                     df_infectious.at[index, 'y'] = person['y']
 
@@ -127,9 +128,19 @@ for day in range(D):
 
                 elif person['Susceptible']:  # If the person is in susceptible state
 
-                    #df_infectious = np.asarray([df_infectious['x'], df_infectious['y']]).T
+                    x_temp = person['x']
+                    df_xtemp = df_infectious[['x']].to_numpy()
+                    
+                    if (x_temp in df_xtemp) or ((x_temp- 1) in df_xtemp) or ((x_temp+ 1) in df_xtemp):
+                        y_temp = person['y']
+                        df_ytemp = df_infectious[['y']].to_numpy()
+                        if (y_temp in df_ytemp) or ((y_temp - 1) in df_ytemp) or ((y_temp + 1) in df_ytemp):
+                            if random.choice(range(0, expose_rate)) > (expose_rate - 2):
+                                df.at[index, 'Exposed'] = 1
+                                df.at[index, 'Susceptible'] = False
 
-                    df_x = df_infectious.loc[
+                    
+                    """df_x = df_infectious.loc[
                         (df_infectious['x'] == person['x']) |
                         (df_infectious['x'] == person['x'] - 1) |
                         (df_infectious['x'] == person['x'] + 1)
@@ -139,19 +150,16 @@ for day in range(D):
                             (df_infectious['y'] == person['y']) |
                             (df_infectious['y'] == person['y'] - 1) |
                             (df_infectious['y'] == person['y'] + 1)
-                            ]
+                            ]#comparison of all rows of x and y col to the 'person' series
                         if not df_y.empty:
 
                             if random.choice(range(0, expose_rate)) > (expose_rate - 2):
                                 df.at[index, 'Exposed'] = 1
-                                df.at[index, 'Susceptible'] = False
+                                df.at[index, 'Susceptible'] = False"""
 
                 if person['Infectious'] == 0:
                     Cum_Economy = Cum_Economy + round(random.uniform(0.8, 1), 2)
                     Economy = Economy + round(random.uniform(0.8, 1), 2)
-
-    end = datetime.datetime.now()
-    print("took this time", end - start)
 
     # Gathering the data
     KPI_df.loc[day + 1, 'Active Cases'] = df.loc[df['Infectious'] > 0].Infectious.count()
@@ -161,9 +169,12 @@ for day in range(D):
     KPI_df.loc[day + 1, 'Reproduction Rate'] = df.loc[df['Infectious'] == 1].Infectious.count()
     KPI_df.loc[day + 1, 'Economy'] = Economy
     KPI_df.loc[day + 1, 'Current Movement Restriction'] = 0
+    
+end = datetime.datetime.now()
+print("took this time", end - start)
+
 
 # %%
 
-df
 
 # %%
