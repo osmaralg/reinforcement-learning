@@ -1,0 +1,87 @@
+
+
+{% block areaplot %}
+{% load static %}
+
+{% endblock %}
+
+
+
+<script src="{% static 'Highcharts-9.0.1/code/highcharts.js' %}"></script>
+<script src="{% static 'Highcharts-9.0.1/code/modules/exporting.js' %}"></script>
+<script src="{% static 'Highcharts-9.0.1/code/modules/export-data.js' %}"></script>
+<script src="{% static 'Highcharts-9.0.1/code/modules/accessibility.js' %}"></script>
+
+
+<script type="text/javascript">
+
+    function LinePlot(title, subtitle, yAxisTitle, divId){
+
+        var chart = new Highcharts.chart(divId, {
+            chart: {
+                type: 'area'
+            },
+            accessibility: {
+                description: ''
+            },
+            title: {
+                text: title
+            },
+            subtitle: {
+                text: subtitle
+            },
+            xAxis: {
+                allowDecimals: false,
+                labels: {
+                    formatter: function () {
+                        return this.value; // clean, unformatted number for year
+                    }
+                },
+                accessibility: {
+                    rangeDescription: 'Range: 0 to 30.'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: yAxisTitle
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value / 1000 + 'k';
+                    }
+                }
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y:,.0f}</b><br/> {series.name}  in day {point.x}'
+            },
+            plotOptions: {
+                area: {
+                    pointStart: 0,
+                    marker: {
+                        enabled: false,
+                        symbol: 'circle',
+                        radius: 2,
+                        states: {
+                            hover: {
+                                enabled: true
+                            }
+                        }
+                    }
+                }
+            },
+            series: []
+
+            /**[{
+                name: 'Population',
+                data: [0, 5, 20]
+            }, {
+                name: 'Dead',
+                data: [10, 4, 3]
+            }]**/
+        });
+
+    return chart
+    } // endof poluationPlot
+
+
+</script>
