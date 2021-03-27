@@ -1,10 +1,13 @@
 
+
 {% extends "base.html" %}
 {% load static %}
+
+
 {% block content %}
 
+{% include "line_plot.html" %}    
   <main id="main">
-
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
       <div class="container">
@@ -69,19 +72,29 @@
           </div>
             {% endfor %}
 
-            <div class=" portfolio-item population">
-                <div>
-                    {% include "population_plot.html" %}
-                </div>
+            <div class="col-md-6 portfolio-item population">
+                <figure class="highcharts-figure">
+                    <div id="populationContainer"></div>
+                </figure>
             </div>
 
-            <div class=" portfolio-item economy">
-                <div>
-                    {% include "economy_plot.html" %}
-                </div>
+            <div class="col-md-6 portfolio-item cases">
+                <figure class="highcharts-figure">
+                    <div id="casesContainer"></div>
+                </figure>
             </div>
 
+            <div class="col-md-6 portfolio-item economy">
+                <figure class="highcharts-figure">
+                    <div id="economyContainer"></div>
+                </figure>
+            </div>
 
+            <div class="col-md-6 portfolio-item grow">
+                <figure class="highcharts-figure">
+                    <div id="growContainer"></div>
+                </figure>
+            </div>
 
 
         </div>
@@ -113,10 +126,37 @@
     </section><!-- End About Section -->
 
 
-
 {% include 'footer.html' %}
   </main><!-- End #main -->
 
+<script type="text/javascript">
 
+    var populationPlot = LinePlot('Population', 'populationContainer')
+    var casesPlot = LinePlot('Active Cases', 'casesContainer')
+    var economyPlot = LinePlot('Economy', 'economyContainer')
+    var growPlot = LinePlot('Grow Rate', 'growContainer')
+
+    $.post("{% url 'predict' %}",
+      {
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        post_type:"split_polygon",
+      },
+
+      function(data){
+        console.log(data)
+
+        var results = data.data
+        chart.update()
+
+    });
+    
+
+    populationPlot.series[0].setData([]);
+    populationPlot.redraw();
+
+    //console.log(doSomething())
+</script>
 
 {% endblock %}
+
+
