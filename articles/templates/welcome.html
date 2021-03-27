@@ -22,19 +22,19 @@
                 interact on an environment (real/virtual) to achieve the cherished goal. 
             </p>
         </div>
-        {% include "minst.html" %}
+        <div style="max-height: 500px">
+            {% include "scatter_plot.html" %}
+        </div>
       </div>
     </section><!-- End About Section -->
 
-    <div>
-        {% include "scatter_plot.html" %}
-    </div>
+
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio section-bg" >
       <div class="container">
 
         <div class="section-title" data-aos="fade-up">
-          <h2>Portfolio</h2>
+          <h2>KPIs</h2>
         </div>
 
         <div class="row" data-aos="fade-up">
@@ -44,11 +44,14 @@
               {% for category in categories %}
                   <li data-filter=".{{category.name}}">{{ category.name }}</li>
               {% endfor %}
+              <li data-filter='.population'>Population</li>
+              <li data-filter='.economy'>Economy</li>
+
             </ul>
           </div>
         </div>
 
-        <div class="row portfolio-container" data-aos="fade-up">
+        <div class="row portfolio-container"  style="min-height: 500px" data-aos="fade-up">
 
             {% for article in articles %}
               <div class="col-lg-4 col-md-6 portfolio-item {{article.category.name}}">
@@ -63,13 +66,51 @@
                   </div>
                 </div>
               </div>
+          </div>
             {% endfor %}
+
+            <div class=" portfolio-item population">
+                <div>
+                    {% include "population_plot.html" %}
+                </div>
+            </div>
+
+            <div class=" portfolio-item economy">
+                <div>
+                    {% include "economy_plot.html" %}
+                </div>
+            </div>
+
+
+
 
         </div>
 
       </div>
     </section><!-- End Portfolio Section -->
 
+        <!-- ======= About Section ======= -->
+    <section id="team" class="about">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Team</h2>
+          <h3>Exploring optimal control of epidemic spread using reinforcement learning</h3>
+            <p>Pandemic defnes the global outbreak of a disease having a high transmission rate. The impact of a
+                pandemic situation can be lessened by restricting the movement of the mass. However, one of its
+                concomitant circumstances is an economic crisis. In this article, we demonstrate what actions an
+                agent (trained using reinforcement learning) may take in diferent possible scenarios of a pandemic
+                depending on the spread of disease and economic factors. To train the agent, we design a virtual
+                pandemic scenario closely related to the present COVID-19 crisis. Then, we apply reinforcement
+                learning, a branch of artifcial intelligence, that deals with how an individual (human/machine) should
+                interact on an environment (real/virtual) to achieve the cherished goal. 
+            </p>
+        </div>
+        <div style="max-height: 500px">
+            {% include "scatter_plot.html" %}
+        </div>
+      </div>
+    </section><!-- End About Section -->
 
 
 
