@@ -6,10 +6,14 @@
 
 {% block content %}
 
-{% include "line_plot.html" %}    
-  <main id="main">
+    {% include "scatter_plot.html" %}
+    {% include 'bar_plot.html' %}
+    {% include "line_plot.html" %}
+  
+
+    <main id="main">
     <!-- ======= About Section ======= -->
-    <section id="about" class="about">
+    <section id="about" class="portfolio section-bg">
       <div class="container">
 
         <div class="section-title">
@@ -24,12 +28,100 @@
                 learning, a branch of artifcial intelligence, that deals with how an individual (human/machine) should
                 interact on an environment (real/virtual) to achieve the cherished goal. 
             </p>
-        </div>
-        <div style="max-height: 500px">
-            {% include "scatter_plot.html" %}
+
         </div>
       </div>
     </section><!-- End About Section -->
+
+        <!-- ======= About Section ======= -->
+    <section id="environment" class="about">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Environment</h2>
+          <h3>Exploring optimal control of epidemic spread using reinforcement learning</h3>
+
+                      <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>  s = 250  # size of the grid </p>
+                        <p>  N = 1000  # size of population</p>
+                        <p>  M = round(N * 0.007)  # Number of infectious population</p>
+                        <p> Et = 2  # Number of days staying exposed</p>
+                        <p> It = 21  # Number of days staying infectious</p>
+                        <p> Mt = 2  # Number of daily movements</p>
+                        <p>  D = 1  # Number of days</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="container facts">
+                        <div class="row no-gutters">
+                          <div class="col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
+                            <div class="count-box">
+                              <i class="icofont-document-folder"></i>
+                              <span data-toggle="counter-up">1</span>
+                              <p><strong>Active Cases</strong> consequuntur quae</p>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
+                            <div class="count-box">
+                              <i class="icofont-simple-smile"></i>
+                              <span data-toggle="counter-up">521</span>
+                              <p><strong>Economy</strong> adipisci atque cum quia aut</p>
+                            </div>
+                          </div>
+                    </div>
+                        </div>
+
+                </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <button>Previous</button>
+                <button>Pause</button>
+                <button onclick="goNext()">Next</button>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <figure class="highcharts-figure">
+                        <div id="scatterContainer" style="min-height: 400px"></div>
+                    </figure>
+            </div>
+            <div class="col-md-6">
+                    <figure class="highcharts-figure">
+                        <div id="barContainer" style="min-height: 500px"></div>
+
+                    </figure>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                        <p class="highcharts-description">
+                            Figure 1. This graph represents the initial state of the pandemic. Te black dots denote the position of the
+                            susceptible population. Te red dots denote the position of the infectious population. Te virtual environment
+                            contains 10,000 population, in which, 70 (0.7%) of them are infectious. Tis is a challenging scenario because
+                            the infectious is heavily spread all over the regions. Te density of the environment is set to be 0.02.
+                        </p>
+                </div>
+                <div class="col-md-6">
+                        <p class="highcharts-description">
+                            Figure 2. This graph represents the initial state of the pandemic. Te black dots denote the position of the
+                            susceptible population. Te red dots denote the position of the infectious population. Te virtual environment
+                            contains 10,000 population, in which, 70 (0.7%) of them are infectious. Tis is a challenging scenario because
+                            the infectious is heavily spread all over the regions. Te density of the environment is set to be 0.02.
+                        </p>
+                </div>
+            </div>
+
+        </div>
+      </div>
+
+    </section><!-- End About Section -->
+
 
 
     <!-- ======= Portfolio Section ======= -->
@@ -37,7 +129,16 @@
       <div class="container">
 
         <div class="section-title" data-aos="fade-up">
-          <h2>KPIs</h2>
+          <h2>Results</h2>
+          <p>
+            Te overall implementation is conducted using Python30, Keras31, and TensorFlow32. Matplotlib33 is used for
+            graphical representations. Te experiments are conducted in a virtual environment implemented on a quadratic
+            time complexity based algorithm, which is provided as a Supplementary fle 1. Terefore, we experiment with a
+            limited number of 10,000 population and a default daily movement of 15 steps. In this section, we frst evaluate
+            the virtual environment by comparing it with the ODE model. Ten we compare the agent’s performance based
+            on diferent memory lengths and try to resonate an optimal agent. Further, we explore the decisions and exploit
+            the strategy behind the agent’s decision.
+        </p> 
         </div>
 
         <div class="row" data-aos="fade-up">
@@ -48,7 +149,10 @@
                   <li data-filter=".{{category.name}}">{{ category.name }}</li>
               {% endfor %}
               <li data-filter='.population'>Population</li>
+              <li data-filter='.cases'>Active Cases</li>
               <li data-filter='.economy'>Economy</li>
+              <li data-filter='.grow'>Grow Rate</li>
+
 
             </ul>
           </div>
@@ -102,60 +206,203 @@
       </div>
     </section><!-- End Portfolio Section -->
 
-        <!-- ======= About Section ======= -->
-    <section id="team" class="about">
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team">
       <div class="container">
 
-        <div class="section-title">
+        <div class="section-title" data-aos="fade-up">
           <h2>Team</h2>
-          <h3>Exploring optimal control of epidemic spread using reinforcement learning</h3>
-            <p>Pandemic defnes the global outbreak of a disease having a high transmission rate. The impact of a
-                pandemic situation can be lessened by restricting the movement of the mass. However, one of its
-                concomitant circumstances is an economic crisis. In this article, we demonstrate what actions an
-                agent (trained using reinforcement learning) may take in diferent possible scenarios of a pandemic
-                depending on the spread of disease and economic factors. To train the agent, we design a virtual
-                pandemic scenario closely related to the present COVID-19 crisis. Then, we apply reinforcement
-                learning, a branch of artifcial intelligence, that deals with how an individual (human/machine) should
-                interact on an environment (real/virtual) to achieve the cherished goal. 
-            </p>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
-        <div style="max-height: 500px">
-            {% include "scatter_plot.html" %}
+
+        <div class="row">
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up">
+            <div class="member">
+              <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Ajmera Mahita</h4>
+                  <span>Chief Executive Officer</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="icofont-twitter"></i></a>
+                  <a href=""><i class="icofont-facebook"></i></a>
+                  <a href=""><i class="icofont-instagram"></i></a>
+                  <a href=""><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="member">
+              <img src="{% static 'assets/img/team/team-2.jpg' %}" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Alcala Osmar</h4>
+                  <span>Product Manager</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="icofont-twitter"></i></a>
+                  <a href=""><i class="icofont-facebook"></i></a>
+                  <a href=""><i class="icofont-instagram"></i></a>
+                  <a href=""><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="member">
+              <img src="{% static 'assets/img/team/team-3.jpg' %}" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Gül Yagmur</h4>
+                  <span>CTO</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="icofont-twitter"></i></a>
+                  <a href=""><i class="icofont-facebook"></i></a>
+                  <a href=""><i class="icofont-instagram"></i></a>
+                  <a href=""><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="member">
+              <img src="{% static 'assets/img/team/team-4.jpg' %}" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Hsao Yi</h4>
+                  <span>Accountant</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="icofont-twitter"></i></a>
+                  <a href=""><i class="icofont-facebook"></i></a>
+                  <a href=""><i class="icofont-instagram"></i></a>
+                  <a href=""><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
-    </section><!-- End About Section -->
+    </section><!-- End Team Section -->
 
 
-{% include 'footer.html' %}
+
+    {% include 'footer.html' %}
   </main><!-- End #main -->
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    var populationPlot = LinePlot('Population', 'populationContainer')
-    var casesPlot = LinePlot('Active Cases', 'casesContainer')
-    var economyPlot = LinePlot('Economy', 'economyContainer')
-    var growPlot = LinePlot('Grow Rate', 'growContainer')
+        var day = 1
+        var daysData = []
+        var scatterPlot = ScatterPlot('State of the pandemic', 'scatterContainer');
+        var barPlot = BarPlot('barContainer')
+        var populationPlot = LinePlot('Population', '', 'yaxistitle', 'populationContainer');
+        var casesPlot = LinePlot('Active Cases', '', 'yaxistitle', 'casesContainer');
+        var economyPlot = LinePlot('Economy', '', 'yaxistitle', 'economyContainer');
+        var growPlot = LinePlot('Grow Rate', '', 'yaxistitle', 'growContainer');
 
-    $.post("{% url 'predict' %}",
-      {
-        csrfmiddlewaretoken: "{{ csrf_token }}",
-        post_type:"split_polygon",
-      },
+        function updateScatterAndBar(){
 
-      function(data){
-        console.log(data)
+            console.log("update-------------------", day.toString() )
 
-        var results = data.data
-        chart.update()
+            var dayData = daysData[day.toString() + '.0']
+            console.log(dayData)
 
-    });
+
+            scatterPlot.update({
+                series: [ 
+                {   
+                    name: 'Susceptible',
+                    color: 'rgba(0,0,0,0.5)',
+                    data: dayData["susceptible"].slice()
+                },
+                {   
+                    name: 'Infectious',
+                    color: 'rgba(255,0,0,1)',
+                    data: dayData["infectious"].slice(),
+                    marker: {
+                        radius: 4
+                    },
+                }
+                ]
+            }, true, false, {
+                duration: 800
+            });
+
+            function getData(data) {
+
+                var barData = [
+                    {
+                        name: 'Susceptible',
+                        y: data['total_susceptible'],
+                        color: 'rgba(1,0,0,0.1)'
+                    },
+                    {
+                        name: 'Dead',
+                        y: data['total_dead'],
+                        color: 'rgba(1,0,0,0.1)'
+                    },
+                    {
+                        name: 'Healthy',
+                        y: data['total_healthy'],
+                        color: 'rgba(1,0,0,0.1)'
+                    },
+                    {
+                        name: 'Sick',
+                        y: data['total_sick'],
+                        color: 'rgba(1,0,0,0.1)'
+                    },]
+                return barData
+
+            }
+
+            barPlot.update({
+                series: [ {
+                    name: 'Susceptible',
+                    data: getData(dayData).slice()
+                }]
+            }, true, false, {
+                duration: 800
+            });
+
+        } // end of updateScatterAndBar
+
+        $.getJSON( "{% static 'data/dynamic_graphs_data.json' %}", function( data ) {
+            console.log(data)
+            daysData = data
+            updateScatterAndBar()
     
+        });
 
-    populationPlot.series[0].setData([]);
-    populationPlot.redraw();
+        function simulateEnvironment(){
+            $.post("{% url 'predict' %}",
+              {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                post_type:"split_polygon",
+              },
 
-    //console.log(doSomething())
-</script>
+              function(data){
+                console.log(data)
+
+            });
+        }
+        
+        //populationPlot.series[0].setData([]);
+        //populationPlot.redraw();
+        function goNext(){
+            day += 1
+            updateScatterAndBar()
+        }
+    </script>
 
 {% endblock %}
 
