@@ -1,18 +1,19 @@
 # %%
-
+import sys
+sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
 import pandas as pd
 import numpy as np
 import random
 # import time
 import datetime
 import json
-from articles.functions import create_scatter_plot
+from articles.functions import create_scatter_plot, calculate_reward_action, simulate
 
 # %%
 
 # Inputs
 s = 50  # size of the grid
-N = 1000  # size of population
+N = 100  # size of population
 M = round(N * 0.07)  # Number of infectious population
 Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
@@ -77,10 +78,9 @@ df_infectious = df_infectious[['x', 'y']]
 
 # %%
 
-
 for day in range(D):
 
-    # start = datetime.datetime.now()
+    #start = datetime.datetime.now()
     Economy = 0  # Economy per day
     for mt in range(Mt):
 
@@ -168,9 +168,24 @@ with open('static/data/dynamic_graphs_data.json', 'w', encoding='utf-8') as f:
     json.dump(scatterplot_dict, f, ensure_ascii=False, indent=4)
     f.close()
 
-KPI_df = KPI_df.replace(np.nan, None)
-static_graph_df = KPI_df[['Active Cases', 'Susceptible', 'Death Cases', 'Economy']].copy(deep=True)
+static_graph_df = KPI_df[['Active Cases', 'Susceptible', 'Death Cases']].copy(deep=True)
+static_graph_df.drop(static_graph_df.head(1).index, inplace=True)
 static_graph = static_graph_df.to_dict("list")
+
+
+reward = []
+action=[]
+days = D #to ensure local variable D is used - may not be needed
+for day in range(days):
+    daily_reward, daily_action = calculate_reward_action()
+    #daily_reward, daily_action = simulate("calc")
+    reward.append(daily_reward)
+    action.append(daily_action)
+    print(day)
+
+static_graph["Reward"] = reward
+static_graph["Action"] = action    
+
 for key in static_graph:
     for value in range(len(static_graph[key])):
         static_graph[key][value] = int(static_graph[key][value]) if not np.isnan(static_graph[key][value]) else None
@@ -179,27 +194,11 @@ with open('static/data/static_graphs_data.json', 'w', encoding='utf-8') as j:
     json.dump(static_graph, j, ensure_ascii=False, indent=4)
     j.close()
 
+
+
+
+    
 # %%
 
-"""
-
-df_temp = scatterplot.groupby('Day')[['Status']].apply(lambda x: x.set_index('Position').to_dict()).to_dict()
-df_temp=scatterplot.groupby(['Day','Status'],as_index=False)['Position'].apply(lambda x : x.values.tolist()[0]).to_frame()
-
-line = pd.DataFrame()
-#len_daily_status = len(daily_status)
-for stat in status:
-    start = datetime.datetime.now()
-    #begin = len(daily_status) - len_daily_status
-    for index in range(len(daily_status)):        
-        if stat not in daily_status.at[index,"Status"]:
-            line = pd.DataFrame({"Position": None, "Status": stat, "Day": daily_status.at[index,"Day"], "index": daily_status.at[index,"index"]}, index=[index])
-            #daily_status = pd.concat([daily_status.iloc[:index-1], line, daily_status.iloc[index-1:]]).reset_index(drop=True)
-            
-    end = datetime.datetime.now()
-    print("index: ", index, " took this time", end - start)    
-                #sort by day first and then by index
-
-"""
 
 # %%

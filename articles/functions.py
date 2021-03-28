@@ -24,7 +24,7 @@ import json
 
 # Inputs
 s = 50  # size of the grid
-N = 1000  # size of population
+N = 100  # size of population
 M = round(N * 0.07)  # Number of infectious population
 Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
@@ -219,10 +219,50 @@ def simulate(df=reset(), current_day=0):
     df = one_day(df, action=action_by_agent)
     gain = economy_gain(df)
     economy += gain
-    print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
+    #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
+def calculate_reward_action(df=reset(), current_day=0):
+    # calculate reward and action
+    economy = 0
+    model = load_model("model_ann_3layer")
+    state = current_state(df)
+    state = tf.reshape(state, [1, 5])
+    prediction = model.predict(state, steps=1)
+    action_by_agent = np.argmax(prediction)
+    df = one_day(df, action=action_by_agent)
+    gain = economy_gain(df)
+    economy += gain
+        
+    return gain, action_by_agent
+
+"""
+alternatively function simulate can be changed as below:
+( another parameter has to be added
+ the line that calls the function will have to be changed everywhere
+ i have left it as a comment where i also call the function in project_emec2.py line 183)
+
+def simulate(df=reset(), current_day=0, usecase):
+    # Use the agent to make decisions
+
+    economy = 0
+    model = load_model("model_ann_3layer")
+    state = current_state(df)
+    state = tf.reshape(state, [1, 5])
+    prediction = model.predict(state, steps=1)
+    action_by_agent = np.argmax(prediction)
+    df = one_day(df, action=action_by_agent)
+    gain = economy_gain(df)
+    economy += gain
+    #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
+    plot_dict = create_scatter_plot(df)
+    if usecase == "plot":
+        return plot_dict
+    if usecase == "calc":
+        return gain, action_by_agent
+
+"""
 
 if __name__ == "__main__":
 
@@ -237,3 +277,4 @@ if __name__ == "__main__":
             colors.append('red')
         else:
             colors.append('black')
+
