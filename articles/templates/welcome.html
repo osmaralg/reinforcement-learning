@@ -40,7 +40,7 @@
         <div class="section-title">
           <h2>Environment</h2>
           <h3>Exploring optimal control of epidemic spread using reinforcement learning</h3>
-            <p>Te virtual environment contains 10,000 population, in which, 70 (0.7%) of them are infectious. Tis is a challenging scenario because the infectious is heavily spread all over the regions. Te density of the environment is set to be 0.02</p>
+            <p>The virtual environment contains a population of 10.000 people, in which, 70 (0.7%) of them are infectious. It is is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02.</p>
               <div class="container">
                 <div class="row">
 
@@ -113,18 +113,12 @@
             <div class="row">
                 <div class="col-md-6">
                         <p class="highcharts-description">
-                            Figure 1. This graph represents the initial state of the pandemic. Te black dots denote the position of the
-                            susceptible population. Te red dots denote the position of the infectious population. Te virtual environment
-                            contains 10,000 population, in which, 70 (0.7%) of them are infectious. Tis is a challenging scenario because
-                            the infectious is heavily spread all over the regions. Te density of the environment is set to be 0.02.
+                            Figure 1. This graph represents the daily positions of people during the pandemic. Black dots denote the position of the susceptible (exposed) population. The red dots denote the position of the infectious population. We can see how the infection spreads across the region over a month.
                         </p>
                 </div>
                 <div class="col-md-6">
                         <p class="highcharts-description">
-                            Figure 2. This graph represents the initial state of the pandemic. Te black dots denote the position of the
-                            susceptible population. Te red dots denote the position of the infectious population. Te virtual environment
-                            contains 10,000 population, in which, 70 (0.7%) of them are infectious. Tis is a challenging scenario because
-                            the infectious is heavily spread all over the regions. Te density of the environment is set to be 0.02.
+                            Figure 2. This graph represents the daily changes in the health status of the population during the pandemic. We can see the daily new cases of infections ("Infectious") and the daily new deaths ("Dead") throughout the month
                         </p>
                 </div>
             </div>
@@ -143,11 +137,11 @@
         <div class="section-title" data-aos="fade-up">
           <h2>Results</h2>
           <p>
-            Te overall implementation is conducted using Python30, Keras31, and TensorFlow32. Matplotlib33 is used for
-            graphical representations. Te experiments are conducted in a virtual environment implemented on a quadratic
-            time complexity based algorithm, which is provided as a Supplementary fle 1. Terefore, we experiment with a
-            limited number of 10,000 population and a default daily movement of 15 steps. In this section, we frst evaluate
-            the virtual environment by comparing it with the ODE model. Ten we compare the agent’s performance based
+            The overall implementation is conducted using Python30, Keras31, and TensorFlow32. MatPlotLib33 is used for
+            graphical representations. The experiments are conducted in a virtual environment implemented on a quadratic
+            time complexity based algorithm, which is provided in "Supplementary file 1". We experiment with a
+            limited population of 10.000 people and a default daily movement of 15 steps. In this section, we first evaluate
+            the virtual environment by comparing it with the ODE model. Then we compare the agent’s performance based
             on diferent memory lengths and try to resonate an optimal agent. Further, we explore the decisions and exploit
             the strategy behind the agent’s decision.
         </p> 
@@ -224,24 +218,20 @@
 
         <div class="section-title" data-aos="fade-up">
           <h2>Team</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+          
         </div>
 
         <div class="row">
 
           <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up">
             <div class="member">
-              <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt="">
+              <img src="{% static 'assets/img/team/mahita.jpg' %}" class="img-fluid" alt="">
               <div class="member-info">
                 <div class="member-info-content">
-                  <h4>Ajmera Mahita</h4>
-                  <span>Chief Executive Officer</span>
+                  <h4>Mahita Ajmera</h4>
                 </div>
                 <div class="social">
-                  <a href=""><i class="icofont-twitter"></i></a>
-                  <a href=""><i class="icofont-facebook"></i></a>
-                  <a href=""><i class="icofont-instagram"></i></a>
-                  <a href=""><i class="icofont-linkedin"></i></a>
+                  <a href="https://www.linkedin.com/in/mahitaajmera/"><i class="icofont-linkedin"></i></a>
                 </div>
               </div>
             </div>
@@ -249,17 +239,13 @@
 
           <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="member">
-              <img src="{% static 'assets/img/team/team-2.jpg' %}" class="img-fluid" alt="">
+              <img src="{% static 'assets/img/team/osmar.jpg' %}" class="img-fluid" alt="">
               <div class="member-info">
                 <div class="member-info-content">
-                  <h4>Alcala Osmar</h4>
-                  <span>Product Manager</span>
+                  <h4>Osmar Alcala</h4>
                 </div>
                 <div class="social">
-                  <a href=""><i class="icofont-twitter"></i></a>
-                  <a href=""><i class="icofont-facebook"></i></a>
-                  <a href=""><i class="icofont-instagram"></i></a>
-                  <a href=""><i class="icofont-linkedin"></i></a>
+                  <a href="https://www.linkedin.com/in/osmar-alexander-alcal%C3%A1-garc%C3%ADa-56094a109/"><i class="icofont-linkedin"></i></a>
                 </div>
               </div>
             </div>
@@ -267,17 +253,13 @@
 
           <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
             <div class="member">
-              <img src="{% static 'assets/img/team/team-3.jpg' %}" class="img-fluid" alt="">
+              <img src="{% static 'assets/img/team/yagmur.jpg' %}" class="img-fluid" alt="">
               <div class="member-info">
                 <div class="member-info-content">
-                  <h4>Gül Yagmur</h4>
-                  <span>CTO</span>
+                  <h4>Yagmur Gül</h4>
                 </div>
                 <div class="social">
-                  <a href=""><i class="icofont-twitter"></i></a>
-                  <a href=""><i class="icofont-facebook"></i></a>
-                  <a href=""><i class="icofont-instagram"></i></a>
-                  <a href=""><i class="icofont-linkedin"></i></a>
+                  <a href="https://www.linkedin.com/in/yagmurrgul/"><i class="icofont-linkedin"></i></a>
                 </div>
               </div>
             </div>
@@ -285,17 +267,13 @@
 
           <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
             <div class="member">
-              <img src="{% static 'assets/img/team/team-4.jpg' %}" class="img-fluid" alt="">
+              <img src="{% static 'assets/img/team/yi.jpg' %}" class="img-fluid" alt="">
               <div class="member-info">
                 <div class="member-info-content">
-                  <h4>Hsao Yi</h4>
-                  <span>Accountant</span>
+                  <h4>Yi Hsiao</h4>
                 </div>
                 <div class="social">
-                  <a href=""><i class="icofont-twitter"></i></a>
-                  <a href=""><i class="icofont-facebook"></i></a>
-                  <a href=""><i class="icofont-instagram"></i></a>
-                  <a href=""><i class="icofont-linkedin"></i></a>
+                  <a href="https://www.linkedin.com/in/yi-hsiao/"><i class="icofont-linkedin"></i></a>
                 </div>
               </div>
             </div>
@@ -316,7 +294,7 @@
         var day = 1
         var daysData = []
         // Enviroment Dashboard
-        var scatterPlot = ScatterPlot('State of the pandemic', 'scatterContainer');
+        var scatterPlot = ScatterPlot('State of the Pandemic', 'scatterContainer');
         var barPlot = BarPlot('barContainer')
         // Results Dashboard
         var casesPlot = LinePlot('Active Cases', '', 'yaxistitle', 'casesContainer');
