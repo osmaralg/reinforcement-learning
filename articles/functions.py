@@ -69,7 +69,6 @@ def init_state():  # init
 def load_model(path):
     return keras.models.load_model(path)
 
-
 def one_day(df, action=0):
     # start_time = time.time()
     global P, M, It, S, death_rate, expose_rate
@@ -144,7 +143,6 @@ def one_day(df, action=0):
 def economy_gain(df):
     economy_gain = len(df[(df.GG == False) & (df.Infectious == 0)]) * round(random.uniform(0.8, 1), 2)
     return economy_gain
-
 
 def current_state(df):
     inf = len(df.loc[df['Infectious'] > 0])
@@ -223,10 +221,10 @@ def simulate(df=init_state(), current_day=0):
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
-def calculate_reward_action(df=init_state(), current_day=0):
+def calculate_reward_action(model , df=init_state()):
     # calculate reward and action
     economy = 0
-    model = load_model("model_ann_3layer")
+    #model = load_model("model_ann_3layer")
     state = current_state(df)
     state = tf.reshape(state, [1, 5])
     prediction = model.predict(state, steps=1)
