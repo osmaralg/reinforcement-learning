@@ -6,14 +6,13 @@ import random
 #import time
 import datetime
 import json
-import matplotlib.pyplot as plt
 
 # %%
 
 # Inputs
 s = 250  # size of the grid
 N = 100  # size of population
-M = round(N * .7)  # Number of infectious population
+M = round(N * .07)  # Number of infectious population
 Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
 Mt = 2  # Number of daily movements
@@ -73,14 +72,14 @@ df_infectious = df.loc[(df['Infectious'] > 0)]
 df_infectious = df_infectious[['x', 'y']]
 
 
-def rule(x,y,z):
-    if x > 0 and not y and not z:
+def rule(infections,susceptible,dead):
+    if infections > 0 and not susceptible and not dead:
          return "infectious"
-    elif y and not z:
+    elif susceptible and not dead:
          return "susceptible"
-    elif x == 0 and not y and not z:
+    elif infections == 0 and not susceptible and not dead:
         return "healthy"
-    elif z:
+    elif dead:
         return "dead"
     else:
         return np.nan
@@ -100,8 +99,8 @@ for day in range(D):
                 new_move_x = random.choice(range(-1, 2))
                 new_move_y = random.choice(range(-1, 2))
 
-                person['x'] = max(min(person['x'] + new_move_x, S), 0)
-                person['y'] = max(min(person['y'] + new_move_y, S), 0)
+                person['x'] = max(min(person['x'] + new_move_x, s), 0)
+                person['y'] = max(min(person['y'] + new_move_y, s), 0)
 
                 df.iat[index, 0] = int(person['x'])
                 df.iat[index, 1] = int(person['y'])
@@ -139,11 +138,11 @@ for day in range(D):
 
                 elif person['Susceptible']:  # If the person is in susceptible state
 
-                    x_temp = person['x']
+                    x_temp = int(person['x'])
                     df_xtemp = df_infectious[['x']].to_numpy()
                 
                     if (x_temp in df_xtemp) or ((x_temp- 1) in df_xtemp) or ((x_temp+ 1) in df_xtemp):
-                        y_temp = person['y']
+                        y_temp = int(person['y'])
                         df_ytemp = df_infectious[['y']].to_numpy()
                         if (y_temp in df_ytemp) or ((y_temp - 1) in df_ytemp) or ((y_temp + 1) in df_ytemp):
                             if random.choice(range(0, expose_rate)) > (expose_rate - 2):
@@ -153,7 +152,7 @@ for day in range(D):
                                 
                 Cum_Economy = Cum_Economy + round(random.uniform(0.8, 1), 2)
                 Economy = Economy + round(random.uniform(0.8, 1), 2)
-        df_day = df.copy(deep=True)
+    df_day = df.copy(deep=True)
     #end = datetime.datetime.now()
     #print("day: ", day, " took this time", end - start)
     # Gathering the data
@@ -161,6 +160,7 @@ for day in range(D):
     KPI_df.loc[day + 1, 'Newly Infected'] = df.loc[df['Infectious'] == 1].Infectious.count()
     KPI_df.loc[day + 1, 'Cured Cases'] = df.loc[df['Recovered'] == True].Recovered.count()
     KPI_df.loc[day + 1, 'Death Cases'] = df.loc[df['GG'] == True].GG.count()
+    KPI_df.loc[day + 1, 'Susceptible'] = df.loc[df['Susceptible'] == True].Susceptible.count()
     KPI_df.loc[day + 1, 'Reproduction Rate'] = df.loc[df['Infectious'] == 1].Infectious.count()
     KPI_df.loc[day + 1, 'Economy'] = Economy
     KPI_df.loc[day + 1, 'Current Movement Restriction'] = 0
@@ -183,7 +183,7 @@ for i, x in daily_status.to_dict('index').items():
 complete_status_df = pd.DataFrame(complete_status)
 complete_status_df.Position= complete_status_df.Position.apply(lambda x: list(x) if type(x)== tuple else x)
 complete_status_df.sort_values(['Day', 'Person'], ascending=[True, True], inplace=True)
-#complete_status_df.to_excel('output.xlsx')
+#complete_status_df.to_excel('output1.xlsx')
 #limited_status = complete_status_df.drop(complete_status_df[(complete_status_df['Status'] == "healthy") | (complete_status_df['Status'] == "dead")].index)
 
 scatterplot = complete_status_df.groupby(['Day','Status'],as_index=False)['Position'].apply(list).to_frame()
@@ -200,11 +200,20 @@ for key in scatterplot_dict:
     del[scatterplot_dict[key]["dead"]]
 
     
-with open('static\dynamic_graphs_data2.json', 'w', encoding='utf-8') as f:
+with open('dynamic_graphs_data.json', 'w', encoding='utf-8') as f:
     json.dump(scatterplot_dict, f, ensure_ascii=False, indent=4)
-    
+    f.close()
 
-#temp = KPI_df.to_dict()
+KPI_df = KPI_df.replace(np.nan, 0)
+static_graph_df = KPI_df[['Active Cases','Susceptible','Death Cases','Economy']].copy(deep=True)
+static_graph = static_graph_df.to_dict("list")
+for key in static_graph:
+    for value in range(len(static_graph[key])):
+        static_graph[key][value] = int(static_graph[key][value]) 
+
+with open('static_graphs_data.json', 'w', encoding='utf-8') as j:
+    json.dump(static_graph, j, ensure_ascii=False, indent=4)
+    j.close()
 
 # %%
 
@@ -223,13 +232,12 @@ with open('static\dynamic_graphs_data2.json', 'w', encoding='utf-8') as f:
 
                             if random.choice(range(0, expose_rate)) > (expose_rate - 2):
                                 df.at[index, 'Exposed'] = 1
-                                df.at[index, 'Susceptible'] = False"""
+                                df.at[index, 'Susceptible'] = False"
 
 
-#df_temp = scatterplot.groupby('Day')[['Status']].apply(lambda x: x.set_index('Position').to_dict()).to_dict()
+df_temp = scatterplot.groupby('Day')[['Status']].apply(lambda x: x.set_index('Position').to_dict()).to_dict()
+df_temp=scatterplot.groupby(['Day','Status'],as_index=False)['Position'].apply(lambda x : x.values.tolist()[0]).to_frame()
 
-#df_temp=scatterplot.groupby(['Day','Status'],as_index=False)['Position'].apply(lambda x : x.values.tolist()[0]).to_frame()
-"""
 line = pd.DataFrame()
 #len_daily_status = len(daily_status)
 for stat in status:
