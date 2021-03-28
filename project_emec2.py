@@ -7,7 +7,7 @@ import random
 # import time
 import datetime
 import json
-from articles.functions import create_scatter_plot, calculate_reward_action, simulate
+from articles.functions import *
 
 # %%
 
@@ -134,7 +134,7 @@ for day in range(D):
                     x_temp = int(person['x'])
                     df_xtemp = df_infectious[['x']].to_numpy()
 
-                    if (x_temp in df_xtemp)or ((x_temp - 1) in df_xtemp) or ((x_temp + 1) in df_xtemp):
+                    if (x_temp in df_xtemp) or ((x_temp - 1) in df_xtemp) or ((x_temp + 1) in df_xtemp):
 
                         y_temp = int(person['y'])
                         df_ytemp = df_infectious[['y']].to_numpy()
@@ -161,6 +161,18 @@ for day in range(D):
 
     df_total = pd.concat([df_total, df_day], axis=0)
 
+reward = []
+action=[]
+days = D #to ensure local variable D is used - may not be needed
+df = init_state()
+df_total = pd.DataFrame()
+
+for day in range(days):
+
+    df = daily_reward, daily_action = calculate_reward_action(df=df)
+    reward.append(daily_reward)
+    action.append(daily_action)
+    print(day)
 
 scatterplot_dict  = create_scatter_plot(df_total)
 
@@ -172,16 +184,6 @@ static_graph_df = KPI_df[['Active Cases', 'Susceptible', 'Death Cases']].copy(de
 static_graph_df.drop(static_graph_df.head(1).index, inplace=True)
 static_graph = static_graph_df.to_dict("list")
 
-
-reward = []
-action=[]
-days = D #to ensure local variable D is used - may not be needed
-for day in range(days):
-    daily_reward, daily_action = calculate_reward_action()
-    #daily_reward, daily_action = simulate("calc")
-    reward.append(daily_reward)
-    action.append(daily_action)
-    print(day)
 
 static_graph["Reward"] = reward
 static_graph["Action"] = action    

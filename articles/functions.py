@@ -45,7 +45,7 @@ economy = 0  # Daily economic transaction
 # %%
 
 # Create a virtual environment actions
-def reset():  # init
+def init_state():  # init
     global P, M, It, s
     dummy_array = np.zeros(shape=(P, 8))
     df = pd.DataFrame(dummy_array, columns=['x', 'y', 'Day', 'Susceptible', 'Exposed', 'Infectious', 'Recovered', 'GG'])
@@ -207,7 +207,7 @@ def rule(infections, susceptible, dead):
         return np.nan
 
 
-def simulate(df=reset(), current_day=0):
+def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
 
     economy = 0
@@ -223,7 +223,7 @@ def simulate(df=reset(), current_day=0):
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
-def calculate_reward_action(df=reset(), current_day=0):
+def calculate_reward_action(df=init_state(), current_day=0):
     # calculate reward and action
     economy = 0
     model = load_model("model_ann_3layer")
@@ -234,8 +234,7 @@ def calculate_reward_action(df=reset(), current_day=0):
     df = one_day(df, action=action_by_agent)
     gain = economy_gain(df)
     economy += gain
-        
-    return gain, action_by_agent
+    return df, gain, action_by_agent
 
 """
 alternatively function simulate can be changed as below:
