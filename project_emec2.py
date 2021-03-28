@@ -6,14 +6,14 @@ import random
 # import time
 import datetime
 import json
+from articles.functions import create_scatter_plot
 
 # %%
 
 # Inputs
-
-s = 250  # size of the grid
+s = 50  # size of the grid
 N = 1000  # size of population
-M = round(N * .07)  # Number of infectious population
+M = round(N * 0.07)  # Number of infectious population
 Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
 Mt = 2  # Number of daily movements
@@ -73,19 +73,6 @@ df_total = pd.DataFrame()
 df_day = pd.DataFrame()
 df_infectious = df.loc[(df['Infectious'] > 0)]
 df_infectious = df_infectious[['x', 'y']]
-
-
-def rule(infections, susceptible, dead):
-    if infections > 0 and not susceptible and not dead:
-        return "infectious"
-    elif susceptible and not dead:
-        return "susceptible"
-    elif infections == 0 and not susceptible and not dead:
-        return "healthy"
-    elif dead:
-        return "dead"
-    else:
-        return np.nan
 
 
 # %%
@@ -174,38 +161,8 @@ for day in range(D):
 
     df_total = pd.concat([df_total, df_day], axis=0)
 
-status = ["healthy", "dead", "infectious", "susceptible"]
-df_total['Status'] = df_total.apply(lambda x: rule(x['Infectious'], x['Susceptible'], x['GG']), axis=1)
-daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(deep=True).reset_index()
-daily_status["Position"] = list(zip(daily_status['x'], daily_status['y']))
-daily_status.rename(columns={"index": "Person"}, inplace=True)
 
-complete_status = []
-for i, x in daily_status.to_dict('index').items():
-    complete_status.append(x)
-    for stat in status:
-        if stat not in daily_status.at[i, "Status"]:
-            complete_status.append({"Position": None, "Status": stat, "Day": daily_status.at[i, "Day"],
-                                    "Person": daily_status.at[i, "Person"]})
-
-complete_status_df = pd.DataFrame(complete_status)
-complete_status_df.Position = complete_status_df.Position.apply(lambda x: list(x) if type(x) == tuple else x)
-complete_status_df.sort_values(['Day', 'Person'], ascending=[True, True], inplace=True)
-# complete_status_df.to_excel('output1.xlsx')
-# limited_status = complete_status_df.drop(complete_status_df[(complete_status_df['Status'] == "healthy") | (complete_status_df['Status'] == "dead")].index)
-
-scatterplot = complete_status_df.groupby(['Day', 'Status'], as_index=False)['Position'].apply(list).to_frame()
-scatterplot_dict = {level: scatterplot.xs(level).to_dict('index') for level in scatterplot.index.levels[0]}
-# for every day and every person and every status we need an entry
-for key in scatterplot_dict:
-    scatterplot_dict[key]["susceptible"] = scatterplot_dict[key]["susceptible"][0]
-    scatterplot_dict[key]["infectious"] = scatterplot_dict[key]["infectious"][0]
-    scatterplot_dict[key]["total_susceptible"] = (sum(x is not None for x in scatterplot_dict[key]["susceptible"]))
-    scatterplot_dict[key]["total_dead"] = (sum(x is not None for x in scatterplot_dict[key]["dead"][0]))
-    scatterplot_dict[key]["total_infectious"] = (sum(x is not None for x in scatterplot_dict[key]["infectious"]))
-    scatterplot_dict[key]["total_healthy"] = (sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
-    del [scatterplot_dict[key]["healthy"]]
-    del [scatterplot_dict[key]["dead"]]
+scatterplot_dict  = create_scatter_plot(df_total)
 
 with open('static/data/dynamic_graphs_data.json', 'w', encoding='utf-8') as f:
     json.dump(scatterplot_dict, f, ensure_ascii=False, indent=4)

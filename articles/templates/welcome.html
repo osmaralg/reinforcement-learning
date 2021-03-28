@@ -51,7 +51,7 @@
 
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
-                              <span data-toggle="counter-up">521</span>
+                              <span id="Counter" data-toggle="counter-up">1</span>
                               <p><strong>Day</strong> adipisci atque cum quia aut</p>
                             </div>
                           </div>
@@ -60,7 +60,7 @@
 
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
-                              <span data-toggle="counter-up">1</span>
+                              <span id="activeCounter" data-toggle="counter-up">100</span>
                               <p><strong>Active Cases</strong> consequuntur quae</p>
                             </div>
                           </div>
@@ -68,7 +68,7 @@
                           <div class="col-md-3 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
                             <div class="count-box">
                               <i class="icofont-simple-smile"></i>
-                              <span data-toggle="counter-up">521</span>
+                              <span id="economyCounter" data-toggle="counter-up">100</span>
                               <p><strong>Economy</strong> adipisci atque cum quia aut</p>
                             </div>
                           </div>
@@ -76,7 +76,7 @@
                           <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
                             <div class="count-box">
                               <i class="icofont-live-support"></i>
-                              <span data-toggle="counter-up">1,463</span>
+                              <span id="deadsCounter" data-toggle="counter-up">100</span>
                               <p><strong>Deads</strong> aut commodi quaerat</p>
                             </div>
                           </div>
@@ -99,15 +99,15 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <figure class="highcharts-figure">
+    
                         <div id="scatterContainer" style="min-height: 400px"></div>
-                    </figure>
+    
             </div>
             <div class="col-md-6">
-                    <figure class="highcharts-figure">
+                
                         <div id="barContainer" style="min-height: 500px"></div>
 
-                    </figure>
+                 
             </div>
             </div>
             <div class="row">
@@ -349,11 +349,7 @@
                 }
                 ]
             }, true, false, {
-<<<<<<< HEAD
                 duration: 0
-=======
-                duration: 1
->>>>>>> 838f74b (remove animation)
             });
 
             function getData(data) {
