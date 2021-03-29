@@ -29,14 +29,14 @@ economy = 0  # Daily economic transaction
 
 # Inputs
 s = 50  # size of the grid
-N = 100  # size of population
-M = round(N * 0.07)  # Number of infectious population
-Et = 2  # Number of days staying exposed
+N = 1000  # size of population
+M = round(N * 0.007)  # Number of infectious population
+Et = 1  # Number of days staying exposed (Incubation rate)
 It = 21  # Number of days staying infectious
 Mt = 5  # Number of daily movements
 D = 200  # Number of days
 death_rate = 100
-expose_rate = 5
+expose_rate = 5 # transmission rate
 
 # Initialization
 S = N - M  # Susceptible population
@@ -121,8 +121,7 @@ def one_day(df, action=0):
                     if (person['Exposed'] - random.choice(
                             range(0, 2))) >= Et:  # If the person has reached the exposed day limit?  7
                         df.at[index, 'Exposed'] = 0
-                        df.at[
-                            index, 'Infectious'] = 1  # Increase the infectious day counter, now the person is infectious
+                        df.at[index, 'Infectious'] = 1  # Increase the infectious day counter, now the person is infectious
                         df_infectious.append(person)
                     elif mt + 1 == Mt:
                         df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
@@ -155,7 +154,7 @@ def current_state(df):
     recovered = len(df.loc[df['Recovered'] == True])
     sus = len(df.loc[df['Susceptible'] == True])
     gg = df.loc[df['GG'] == True].GG.count()
-
+    print(inf)
     return np.array([recovered, sus, exposed, inf, gg])
 
 
@@ -212,11 +211,12 @@ def rule(infections, susceptible, dead):
         return np.nan
 
 
-def simulate(df=init_state(), current_day=0):
+def simulate(model, df=init_state(), current_day=0):
     # Use the agent to make decisions
+    # calculate reward and action
     import tensorflow as tf
+    #model = load_model("model_ann_3layer")
     economy = 0
-    model = load_model("model_ann_3layer")
     state = current_state(df)
     state = tf.reshape(state, [1, 5])
     prediction = model.predict(state, steps=1)
@@ -224,9 +224,7 @@ def simulate(df=init_state(), current_day=0):
     df = one_day(df, action=action_by_agent)
     gain = economy_gain(df)
     economy += gain
-    #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
-    plot_dict = create_scatter_plot(df, gain, action_by_agent)
-    return plot_dict
+    return df, gain, action_by_agent
 
 def calculate_reward_action(df=init_state()):
     # calculate reward and action

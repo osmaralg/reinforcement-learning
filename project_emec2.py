@@ -11,9 +11,9 @@ import json
 from articles.functions import init_state, load_model, current_state, create_scatter_plot, calculate_reward_action, simulate
 
 reward = []
-action=[]
+action= []
 daily_KPI = []
-days = 30 
+days = 200
 df = init_state()
 df_total = pd.DataFrame()
 #model = load_model('articles/model_ann_3layer')
@@ -21,6 +21,7 @@ KPI_df = pd.DataFrame()
 
 for day in range(days):
 
+    #df, daily_reward, daily_action = simulate(model, df=df)
     df, daily_reward, daily_action = calculate_reward_action(df=df)
     df['Day'] = day
     reward.append(daily_reward)
@@ -30,7 +31,7 @@ for day in range(days):
     KPI_df = KPI_df.append(pd.DataFrame(daily_KPI).T)
     df_total = pd.concat([df_total, df], axis=0)
 
-scatterplot_dict  = create_scatter_plot(df_total, reward, action)
+scatterplot_dict = create_scatter_plot(df_total, reward, action)
 
 KPI_df.rename(columns = {0:'Cured Cases', 1:'Susceptible', 2:'Exposed', 3:'Active Cases', 4:'Death Cases'}, inplace=True)
 static_graph_df = KPI_df[['Susceptible', 'Active Cases', 'Death Cases']].copy(deep=True)

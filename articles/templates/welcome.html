@@ -457,7 +457,9 @@
                 day = Math.min(day + 1, 30)
                 updateScatterAndBar()
                 updateCounters();
+                pauseAnimation();
             }
+
 
         }
 
@@ -474,6 +476,7 @@
             day = Math.max(day -1, 0);
             updateScatterAndBar();
             updateCounters();
+            pauseAnimation()
         }
 
         function pauseAnimation(){
