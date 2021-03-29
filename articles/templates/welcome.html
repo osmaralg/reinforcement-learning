@@ -306,8 +306,10 @@
 
             console.log("update-------------------", day.toString() )
 
-            var dayData = daysData[day.toString() + '.0']
+            console.log("daysData", daysData)
+            var dayData = daysData[day.toString()]
 
+            console.log("daydata", dayData)
 
             scatterPlot.update({
                 series: [ 
@@ -369,8 +371,7 @@
 
         function updateCounters(){
 
-            var dayData = daysData[day.toString() + '.0']
-
+            var dayData = daysData[day.toString()]
 
             document.getElementById("dayCounter").textContent = day;
             document.getElementById("activeCounter").textContent = dayData['total_susceptible'];
@@ -381,6 +382,7 @@
         $.getJSON( "{% static 'data/dynamic_graphs_data.json' %}", function( data ) {
             console.log("scatterData", data)
             daysData = data
+
             updateScatterAndBar()
             updateCounters()
     

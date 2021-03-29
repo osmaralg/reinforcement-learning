@@ -6,7 +6,7 @@ from articles.functions import *
 
 reward = []
 action=[]
-days = D #to ensure local variable D is used - may not be needed
+days = 30 #to ensure local variable D is used - may not be needed
 df = init_state()
 df_total = pd.DataFrame()
 model = load_model('articles/model_ann_3layer')
@@ -14,6 +14,7 @@ model = load_model('articles/model_ann_3layer')
 for day in range(days):
 
     df, daily_reward, daily_action = calculate_reward_action(model, tf, df=df)
+    df['Day'] = day
     reward.append(daily_reward)
     action.append(daily_action)
     print(day)

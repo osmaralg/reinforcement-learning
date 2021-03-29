@@ -21,6 +21,9 @@ import json
 
 # %%
 
+
+economy = 0  # Daily economic transaction
+
 # Inputs
 s = 50  # size of the grid
 N = 100  # size of population
@@ -38,13 +41,12 @@ E = 0  # Exposed population
 I = M  # Number of infectious population
 R = 0  # Recovered population
 P = S + E + I + R  # Total population
-economy = 0  # Daily economic transaction
-
 
 # %%
 
 # Create a virtual environment actions
 def init_state():  # init
+
     global P, M, It, s
     dummy_array = np.zeros(shape=(P, 8))
     df = pd.DataFrame(dummy_array, columns=['x', 'y', 'Day', 'Susceptible', 'Exposed', 'Infectious', 'Recovered', 'GG'])
