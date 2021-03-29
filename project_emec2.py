@@ -1,12 +1,7 @@
 # %%
 import sys
 sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
-import pandas as pd
-import numpy as np
-import random
-# import time
-import datetime
-import json
+import tensorflow as tf
 from articles.functions import *
 
 reward = []
@@ -18,7 +13,7 @@ model = load_model('articles/model_ann_3layer')
 
 for day in range(days):
 
-    df, daily_reward, daily_action = calculate_reward_action(model, df=df)
+    df, daily_reward, daily_action = calculate_reward_action(model, tf, df=df)
     reward.append(daily_reward)
     action.append(daily_action)
     print(day)

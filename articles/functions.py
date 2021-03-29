@@ -10,8 +10,7 @@ Original file is located at
 # %%
 
 import numpy as np
-import tensorflow as tf
-from tensorflow import keras
+
 import pandas as pd
 import random
 import json
@@ -67,6 +66,8 @@ def init_state():  # init
 
 
 def load_model(path):
+
+    from tensorflow import keras
     return keras.models.load_model(path)
 
 def one_day(df, action=0):
@@ -207,7 +208,7 @@ def rule(infections, susceptible, dead):
 
 def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
-
+    import tensorflow as tf
     economy = 0
     model = load_model("model_ann_3layer")
     state = current_state(df)
@@ -221,8 +222,9 @@ def simulate(df=init_state(), current_day=0):
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
-def calculate_reward_action(model , df=init_state()):
+def calculate_reward_action(model , tf, df=init_state()):
     # calculate reward and action
+
     economy = 0
     #model = load_model("model_ann_3layer")
     state = current_state(df)
