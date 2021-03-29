@@ -94,7 +94,7 @@
         <div class="container">
             <div class="row">
                 <button onclick="goPrevious()">Previous</button>
-                <button>Pause</button>
+                <button onclick="pauseAnimation()">Pause</button>
                 <button onclick="goNext()">Next</button>
 
             </div>
@@ -291,8 +291,9 @@
 
     <script type="text/javascript">
 
-        var day = 1
-        var daysData = []
+        var day = 1;
+        var daysData = [];
+        var paused = false;
         // Enviroment Dashboard
         var scatterPlot = ScatterPlot('State of the Pandemic', 'scatterContainer');
         var barPlot = BarPlot('barContainer')
@@ -441,22 +442,30 @@
             });
         }
         
-        //populationPlot.series[0].setData([]);
-        //populationPlot.redraw();
         function goNext(){
-            if (day + 1 < 30){
+            if (day + 1 < 30 && !paused){
                 day = Math.min(day + 1, 30)
                 updateScatterAndBar()
-                updateCounters()
+                updateCounters();
             }
 
         }
 
         function goPrevious(){
-            day = Math.max(day -1, 0)
-            updateScatterAndBar()
-            updateCounters()
+            day = Math.max(day -1, 0);
+            updateScatterAndBar();
+            updateCounters();
         }
+
+        function pauseAnimation(){
+            if (paused){
+                paused = false;
+            }
+            else{
+                paused = true;
+            }
+        }
+
     </script>
 
 {% endblock %}
