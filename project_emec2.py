@@ -14,7 +14,6 @@ model = load_model('articles/model_ann_3layer')
 for day in range(days):
 
     df, daily_reward, daily_action = calculate_reward_action(model, tf, df=df)
-    df['Day'] = day
     reward.append(daily_reward)
     action.append(daily_action)
     print(day)
