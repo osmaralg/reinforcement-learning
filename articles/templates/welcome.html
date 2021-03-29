@@ -94,7 +94,7 @@
         <div class="container">
             <div class="row">
                 <button onclick="goPrevious()">Previous</button>
-                <button onclick="pauseAnimation()">Pause</button>
+                <button id="pauseButton" onclick="pauseAnimation()">Pause</button>
                 <button onclick="goNext()">Next</button>
 
             </div>
@@ -460,9 +460,12 @@
         function pauseAnimation(){
             if (paused){
                 paused = false;
+                document.getElementById('pauseButton').text = 'Play';
             }
             else{
                 paused = true;
+                document.getElementById('pauseButton').text = 'Pause'
+
             }
         }
 
