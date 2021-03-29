@@ -92,11 +92,10 @@
             </div>
         </div>
         <div class="container">
-            <div class="row">
+            <div class="row" style="margin: auto;">
                 <button onclick="goPrevious()">Previous</button>
                 <button id="pauseButton" onclick="pauseAnimation()">Pause</button>
                 <button onclick="goNext()">Next</button>
-
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -157,7 +156,7 @@
               {% endfor %}
               <li data-filter='.population'>Population</li>
               <li data-filter='.cases'>Active Cases</li>
-              <li data-filter='.economy'>Economy</li>
+              <li data-filter='.economy'>Reward</li>
               <li data-filter='.grow'>Grow Rate</li>
 
 
@@ -204,6 +203,12 @@
             <div class="col-md-6 portfolio-item grow">
                 <figure class="highcharts-figure">
                     <div id="deadContainer"></div>
+                </figure>
+            </div>
+
+            <div class="col-md-6 portfolio-item grow">
+                <figure class="highcharts-figure">
+                    <div id="policyContainer"></div>
                 </figure>
             </div>
 
@@ -300,17 +305,14 @@
         // Results Dashboard
         var casesPlot = LinePlot('Active Cases', '', 'Count', 'casesContainer');
         var populationPlot = LinePlot('Susceptible', '', 'Count', 'populationContainer');
-        var economyPlot = LinePlot('Economy', '', 'yaxistitle', 'economyContainer');
+        var economyPlot = LinePlot('Reward', '', 'yaxistitle', 'economyContainer');
         var deadPlot = LinePlot('Deaths', '', 'Count', 'deadContainer');
+        var policyPlot = LinePlot('Policies', '', 'Count', 'policyContainer');
 
         function updateScatterAndBar(){
 
-            console.log("update-------------------", day.toString() )
-
-            console.log("daysData", daysData)
+        
             var dayData = daysData[day.toString()]
-
-            console.log("daydata", dayData)
 
             scatterPlot.update({
                 series: [ 
@@ -393,31 +395,37 @@
 
             function( data ) {
 
-
-            casesPlot.update({ 
-                    series: [ {
-                    name: 'Active Cases',
-                    data: data['Active Cases']
-                }]
-            })
-            populationPlot.update({ 
-                    series: [ {
-                    name: 'Susceptible',
-                    data: data['Susceptible']
-                }]
-            })
-            economyPlot.update({ 
-                    series: [ {
-                    name: 'Economy',
-                    data: data['Economy']
-                }]
-            })
-            deadPlot.update({ 
-                    series: [ {
-                    name: 'Dead',
-                    data: data['Death Cases']
-                }]
-            })
+                console.log("line plots data", data)
+                casesPlot.update({ 
+                        series: [ {
+                        name: 'Active Cases',
+                        data: data['Active Cases']
+                    }]
+                })
+                populationPlot.update({ 
+                        series: [ {
+                        name: 'Susceptible',
+                        data: data['Susceptible']
+                    }]
+                })
+                economyPlot.update({ 
+                        series: [ {
+                        name: 'Reward',
+                        data: data['Reward']
+                    }]
+                })
+                deadPlot.update({ 
+                        series: [ {
+                        name: 'Dead',
+                        data: data['Death Cases']
+                    }]
+                })
+                policyPlot.update({ 
+                        series: [ {
+                        name: 'Policy',
+                        data: data['Action']
+                    }]
+                })
     
         });
 
@@ -425,7 +433,7 @@
         // Update the count down every 1 second
         var x = setInterval(function() {
 
-          goNext()
+          playNext()
 
         }, 2000);
 
@@ -437,12 +445,21 @@
               },
 
               function(data){
-                console.log(data)
+                //console.log(data)
 
             });
         }
         
         function goNext(){
+            if (day + 1 < 30 ){
+                day = Math.min(day + 1, 30)
+                updateScatterAndBar()
+                updateCounters();
+            }
+
+        }
+
+        function playNext(){
             if (day + 1 < 30 && !paused){
                 day = Math.min(day + 1, 30)
                 updateScatterAndBar()
@@ -460,12 +477,12 @@
         function pauseAnimation(){
             if (paused){
                 paused = false;
-                document.getElementById('pauseButton').text = 'Play';
+                document.getElementById('pauseButton').innerHTML = 'Pause';
+                playNext();
             }
             else{
                 paused = true;
-                document.getElementById('pauseButton').text = 'Pause'
-
+                document.getElementById('pauseButton').innerHTML = 'Play';
             }
         }
 

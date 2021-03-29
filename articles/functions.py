@@ -23,6 +23,7 @@ import json
 
 # %%
 
+from tensorflow import keras
 
 economy = 0  # Daily economic transaction
 
@@ -71,7 +72,6 @@ def init_state():  # init
 
 def load_model(path):
 
-    from tensorflow import keras
     return keras.models.load_model(path)
 
 def one_day(df, action=0):
