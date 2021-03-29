@@ -30,7 +30,7 @@ for day in range(days):
     KPI_df = KPI_df.append(pd.DataFrame(daily_KPI).T)
     df_total = pd.concat([df_total, df], axis=0)
 
-scatterplot_dict  = create_scatter_plot(df_total)
+scatterplot_dict  = create_scatter_plot(df_total, reward, action)
 
 KPI_df.rename(columns = {0:'Cured Cases', 1:'Susceptible', 2:'Exposed', 3:'Active Cases', 4:'Death Cases'}, inplace=True)
 static_graph_df = KPI_df[['Susceptible', 'Active Cases', 'Death Cases']].copy(deep=True)

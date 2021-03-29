@@ -162,7 +162,7 @@ def current_state(df):
 # %%
 
 
-def create_scatter_plot(df_total):
+def create_scatter_plot(df_total, reward, action):
     status = ["healthy", "dead", "infectious", "susceptible"]
     df_total['Status'] = df_total.apply(lambda x: rule(x['Infectious'], x['Susceptible'], x['GG']), axis=1)
     daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(deep=True).reset_index()
@@ -188,6 +188,8 @@ def create_scatter_plot(df_total):
         scatterplot_dict[key]["susceptible"] = scatterplot_dict[key]["susceptible"][0]
         scatterplot_dict[key]["infectious"] = scatterplot_dict[key]["infectious"][0]
         scatterplot_dict[key]["total_susceptible"] = (sum(x is not None for x in scatterplot_dict[key]["susceptible"]))
+        scatterplot_dict[key]["reward"] = int(reward[key])
+        scatterplot_dict[key]["action"] = int(action[key])
         scatterplot_dict[key]["total_dead"] = (sum(x is not None for x in scatterplot_dict[key]["dead"][0]))
         scatterplot_dict[key]["total_infectious"] = (sum(x is not None for x in scatterplot_dict[key]["infectious"]))
         scatterplot_dict[key]["total_healthy"] = (sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
@@ -223,7 +225,7 @@ def simulate(df=init_state(), current_day=0):
     gain = economy_gain(df)
     economy += gain
     #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
-    plot_dict = create_scatter_plot(df)
+    plot_dict = create_scatter_plot(df, gain, action_by_agent)
     return plot_dict
 
 def calculate_reward_action(df=init_state()):
@@ -281,4 +283,4 @@ if __name__ == "__main__":
             colors.append('red')
         else:
             colors.append('black')
-            
+           
