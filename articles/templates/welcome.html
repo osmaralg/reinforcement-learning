@@ -40,7 +40,8 @@
         <div class="section-title">
           <h2>Environment</h2>
           <h3>Exploring optimal control of epidemic spread using reinforcement learning</h3>
-            <p>The virtual environment contains a population of 10.000 people, in which, 70 (0.7%) of them are infectious. It is is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02.</p>
+            <p>The virtual environment contains a population of 10.000 people, in which, 70 (0.7%) of them are infectious. It is is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02. 
+            The below counter showcases the day, the economic contribution of the population number of active cases and deaths.The graphs represent the movement of people and their health status throughout 1 month corresponding to the day shown on the counter. </p>
               <div class="container">
                 <div class="row">
 
@@ -52,7 +53,7 @@
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
                               <span id="dayCounter" data-toggle="counter-up">1</span>
-                              <p><strong>Day</strong> adipisci atque cum quia aut</p>
+                              <p><strong>Day</strong> </p>
                             </div>
                           </div>
 
@@ -61,7 +62,7 @@
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
                               <span id="activeCounter" data-toggle="counter-up">0</span>
-                              <p><strong>Active Cases</strong> consequuntur quae</p>
+                              <p><strong>Active Cases</strong></p>
                             </div>
                           </div>
 
@@ -69,7 +70,7 @@
                             <div class="count-box">
                               <i class="icofont-simple-smile"></i>
                               <span id="economyCounter" data-toggle="counter-up">0</span>
-                              <p><strong>Economy</strong> adipisci atque cum quia aut</p>
+                              <p><strong>Economy</strong> </p>
                             </div>
                           </div>
 
@@ -77,7 +78,7 @@
                             <div class="count-box">
                               <i class="icofont-live-support"></i>
                               <span id="deadsCounter" data-toggle="counter-up">0</span>
-                              <p><strong>Deads</strong> aut commodi quaerat</p>
+                              <p><strong>Deaths</strong></p>
                             </div>
                           </div>
 
@@ -286,7 +287,6 @@
 
 
 
-    {% include 'footer.html' %}
   </main><!-- End #main -->
 
     <script type="text/javascript">
@@ -297,10 +297,10 @@
         var scatterPlot = ScatterPlot('State of the Pandemic', 'scatterContainer');
         var barPlot = BarPlot('barContainer')
         // Results Dashboard
-        var casesPlot = LinePlot('Active Cases', '', 'yaxistitle', 'casesContainer');
-        var populationPlot = LinePlot('Susceptible', '', 'yaxistitle', 'populationContainer');
+        var casesPlot = LinePlot('Active Cases', '', 'Count', 'casesContainer');
+        var populationPlot = LinePlot('Susceptible', '', 'Count', 'populationContainer');
         var economyPlot = LinePlot('Economy', '', 'yaxistitle', 'economyContainer');
-        var deadPlot = LinePlot('Dead', '', 'yaxistitle', 'deadContainer');
+        var deadPlot = LinePlot('Deaths', '', 'Count', 'deadContainer');
 
         function updateScatterAndBar(){
 
