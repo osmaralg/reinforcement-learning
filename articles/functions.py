@@ -10,6 +10,8 @@ Original file is located at
 # %%
 
 import numpy as np
+#import sys
+#sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
 
 import pandas as pd
 import random
@@ -224,9 +226,10 @@ def simulate(df=init_state(), current_day=0):
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
-def calculate_reward_action(model , tf, df=init_state()):
+def calculate_reward_action(df=init_state()):
     # calculate reward and action
-
+    import tensorflow as tf
+    model = load_model("model_ann_3layer")
     economy = 0
     #model = load_model("model_ann_3layer")
     state = current_state(df)
