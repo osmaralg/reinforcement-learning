@@ -1,6 +1,6 @@
 # %%
-import sys
-sys.path.append('C:/Users/mahit/Documents/MSc/RWTH/3rd sem/EMEC_Project/reinforment-learning')
+#import sys
+#sys.path.append('C:/Users/mahit/Documents/MSc/RWTH/3rd sem/EMEC_Project/reinforment-learning')
 
 import pandas as pd
 import numpy as np
@@ -15,11 +15,11 @@ action= []
 days = 30
 df = init_state()
 df_total = pd.DataFrame()
-#model = load_model('articles/model_ann_3layer')
+model = load_model('articles/model_ann_3layer')
 
 for day in range(days):
 
-    df, daily_reward, daily_action = calculate_reward_action(df=df)
+    df, daily_reward, daily_action = calculate_reward_action(model, df=df)
     df['Day'] = day
     reward.append(daily_reward)
     action.append(daily_action)
