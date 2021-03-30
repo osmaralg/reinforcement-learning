@@ -1,9 +1,10 @@
 # reinforment-learning
 
+<img href="dds-pandemic-control.com" src="/static/assets/img/capture.JPG" alt="My cool logo"/>
 
-<img src="/static/assets/img/capture.JPG" alt="My cool logo"/>
+
 Install
-==============
+========
 
 Install the virtualenv package
 
