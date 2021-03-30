@@ -32,10 +32,10 @@ N = 100  # size of population
 M = round(N * 0.007)  # Number of infectious population
 Et = 1  # Number of days staying exposed (Incubation rate)
 It = 21  # Number of days staying infectious
-Mt = 5  # Number of daily movements
-D = 200  # Number of days
+Mt = 10  # Number of daily movements
+D = 100  # Number of days
 death_rate = 100
-expose_rate = 5 # transmission rate
+expose_rate = 3 # transmission rate
 
 # Initialization
 S = N - M  # Susceptible population
@@ -114,15 +114,15 @@ def one_day(df, action=0):
                             if index in df_infectious.index:
                                 df_infectious.drop([index])
                             df.at[index, 'Recovered'] = True  # Recover the person
-                    elif mt + 1 == Mt:
+                    elif mt + 1 == moves_under_policy:
                         df.at[index, 'Infectious'] = person['Infectious'] + 1  # Increase the infectious day counter
                 elif (person['Exposed'] > 0) and (person['Infectious'] == 0):  # If a person is in exposed state
-                    if (person['Exposed'] - random.choice(
-                            range(0, 2))) >= Et:  # If the person has reached the exposed day limit?  7
+
+                    if (person['Exposed'] - random.choice(range(0, 2))) >= Et:  # If the person has reached the exposed day limit?  7
                         df.at[index, 'Exposed'] = 0
                         df.at[index, 'Infectious'] = 1  # Increase the infectious day counter, now the person is infectious
                         df_infectious.append(person)
-                    elif mt + 1 == Mt:
+                    elif mt + 1 == moves_under_policy:
                         df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
 
                 elif person['Susceptible']:  # If the person is in susceptible state
@@ -181,6 +181,7 @@ def rule(infections, susceptible, dead):
         return "dead"
     else:
         return np.nan
+
 
 
 # %%
@@ -288,6 +289,7 @@ def simulate(df=reset(), current_day=0, usecase):
 
 if __name__ == "__main__":
 
+<<<<<<< HEAD
     df = simulate()
     colors = []
     result = []
@@ -300,3 +302,19 @@ if __name__ == "__main__":
         else:
             colors.append('black')
             
+=======
+    '''
+        df = simulate()
+        colors = []
+        result = []
+        df_dict = df.to_dict('index')
+    
+        for key in df_dict:
+            result.append(df_dict[key])
+            if df_dict[key]['Infectious']:
+                colors.append('red')
+            else:
+                colors.append('black')
+
+    '''
+>>>>>>> 60fd3b8 (sync counter and barplot)

@@ -62,8 +62,8 @@
 
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
-                              <span id="activeCounter" data-toggle="counter-up">0</span>
-                              <p><strong>Active Cases</strong></p>
+                              <span id="infectiousCounter" data-toggle="counter-up">0</span>
+                              <p><strong>Infectious</strong></p>
                             </div>
                           </div>
 
@@ -71,7 +71,7 @@
                             <div class="count-box">
                               <i class="icofont-simple-smile"></i>
                               <span id="economyCounter" data-toggle="counter-up">0</span>
-                              <p><strong>Economy</strong> </p>
+                              <p><strong>Reward</strong> </p>
                             </div>
                           </div>
 
@@ -94,9 +94,9 @@
         </div>
         <div class="container">
             <div class="row" style="margin: auto;">
-                <button class="button" style="margin: auto;" onclick="goPrevious()">Previous</button>
-                <button class="button" style="margin: auto; background-color: red" id="pauseButton" onclick="pauseAnimation()">Pause</button>
-                <button class="button" style="margin: auto;" onclick="goNext()">Next</button>
+                <button class="button" style="margin: auto; width: 150px; max-width: 150px; min-width: 150px" onclick="goPrevious()">Previous</button>
+                <button class="button" style="margin: auto; width: 150px; max-width: 150px; min-width: 150px background-color: red" id="pauseButton" onclick="pauseAnimation()">Pause</button>
+                <button class="button" style="margin: auto; width: 150px; max-width: 150px; min-width: 150px" onclick="goNext()">Next</button>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -314,7 +314,7 @@
 
         function updateScatterAndBar(){
 
-        
+
             var dayData = daysData[day.toString()]
 
             scatterPlot.update({
@@ -380,7 +380,7 @@
             var dayData = daysData[day.toString()]
 
             document.getElementById("dayCounter").textContent = day;
-            document.getElementById("activeCounter").textContent = dayData['total_susceptible'];
+            document.getElementById("infectiousCounter").textContent = dayData['total_infectious'];
             document.getElementById("economyCounter").textContent = dayData['total_healthy'];
             document.getElementById("deadsCounter").textContent = dayData['total_dead'];
         }
@@ -433,12 +433,17 @@
         });
 
 
-        // Update the count down every 1 second
-        var x = setInterval(function() {
+
+
+        window.onload = function() {
+            // Update the count down every 1 second
+            var x = setInterval(function() {
 
           playNext()
 
         }, 2000);
+
+        };
 
         function simulateEnvironment(){
             $.post("{% url 'predict' %}",

@@ -16,13 +16,13 @@ daily_KPI = []
 days = 30
 df = init_state()
 df_total = pd.DataFrame()
-#model = load_model('articles/model_ann_3layer')
+model = load_model('articles/model_ann_3layer')
 KPI_df = pd.DataFrame()
 
 for day in range(days):
-
-    #df, daily_reward, daily_action = simulate(model, df=df)
-    df, daily_reward, daily_action = calculate_reward_action(df=df)
+    print("day", day)
+    df, daily_reward, daily_action = simulate(model, df=df)
+    #df, daily_reward, daily_action = calculate_reward_action(df=df)
     df['Day'] = day
     reward.append(daily_reward)
     action.append(daily_action)    
