@@ -8,18 +8,19 @@ import numpy as np
 # import time
 #import datetime
 import json
+import tensorflow as tf
 from articles.functions import init_state, load_model, health_state, create_scatter_plot, calculate_reward_action
 
 reward = []
 action= []
-days = 30
+days = 100
 df = init_state()
 df_total = pd.DataFrame()
 model = load_model('articles/model_ann_3layer')
 
 for day in range(days):
 
-    df, daily_reward, daily_action = calculate_reward_action(model, df=df)
+    df, daily_reward, daily_action = calculate_reward_action(tf, model, df=df)
     df['Day'] = day
     reward.append(daily_reward)
     action.append(daily_action)

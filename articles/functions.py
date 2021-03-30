@@ -200,10 +200,7 @@ def rule(infections, susceptible, dead):
     else:
         return np.nan
 
-
-
 # %%
-
 
 def create_scatter_plot(df_total, reward, action):
     status = ["healthy", "dead", "infectious", "susceptible", "newly infected"]
@@ -256,7 +253,7 @@ def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
     import tensorflow as tf
     economy = 0
-    model = load_model("model_ann_3layer")
+    model = load_model("model_ann_3layer2.pb")
     state = current_state(df)
     state = tf.reshape(state, [1, 6])
     prediction = model.predict(state, steps=1)
@@ -268,9 +265,8 @@ def simulate(df=init_state(), current_day=0):
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
-def calculate_reward_action(model, df=init_state()):
+def calculate_reward_action(tf, model, df=init_state()):
     # calculate reward and action
-    import tensorflow as tf
     #model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
