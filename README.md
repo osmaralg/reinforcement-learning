@@ -36,7 +36,7 @@ File Description
 -----------------
 project_emec2.py: Takes input from the reinforcement learning model and creates the necessary JSON files for further visualization.
 
-manage.py: Contains all the commands required to run the server
+`manage.py`: Contains all the commands required to run the server
 
 manage - Copy.py:
 
