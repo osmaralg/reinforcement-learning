@@ -218,6 +218,12 @@
                 </figure>
             </div>
 
+            <div class="col-md-6 portfolio-item grow">
+                <figure class="highcharts-figure">
+                    <div id="newDaylyContainer"></div>
+                </figure>
+            </div>
+
 
         </div>
 
@@ -314,6 +320,9 @@
         var economyPlot = LinePlot('Reward', '', 'Reward Amount', 'economyContainer');
         var deadPlot = LinePlot('Deaths', '', 'Count', 'deadContainer');
         var policyPlot = LinePlot('Policies', '', 'Policy Selected', 'policyContainer');
+        var newDaylyPlot = LinePlot('New Dayly Cases', '', 'New Dayly Cases', 'newDaylyContainer');
+
+
 
         function updateScatterAndBar(){
 
@@ -434,6 +443,13 @@
                         data: data['Action']
                     }]
                 })
+                newDaylyPlot.update({ 
+                        series: [ {
+                        name: 'Dayly',
+                        data: data['Action']
+                    }]
+                })
+
     
         });
 
