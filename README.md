@@ -1,7 +1,7 @@
 # reinforment-learning
 
-.. image::  https://raw.githubusercontent.com/osmaralg/reinforment-learning/main/static/assets/img/capture.JPG
 
+<img src="/static/assets/img/capture.JPG" alt="My cool logo"/>
 Install
 ==============
 
