@@ -3,16 +3,16 @@
 Install
 ==============
 
-Install the virtualenv package
+Install the virtualenv package (Linux)
 
-pip install virtualenv
+`pip install virtualenv`
 
-virtualenv
+Create virtual environment called env, myenv, etc. 
+
+`virtualenv env`
+
+Activate the virtualenvironmnent
+
+`source env/bin/activate`
 
 
-=== Named links ===
-<syntaxhighlight lang="restructuredtext">
-A sentence with links to `Wikipedia`_ and the `Linux kernel archive`_.
-.. _Wikipedia: https://www.wikipedia.org/
-.. _Linux kernel archive: https://www.kernel.org/
-</syntaxhighlight>
