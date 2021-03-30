@@ -23,7 +23,6 @@ import json
 
 # %%
 
-from tensorflow import keras
 
 economy = 0  # Daily economic transaction
 
@@ -71,7 +70,7 @@ def init_state():  # init
 
 
 def load_model(path):
-
+    from tensorflow import keras
     return keras.models.load_model(path)
 
 def one_day(df, action=0):
@@ -163,8 +162,10 @@ def current_state(df):
 
 def create_scatter_plot(df_total, reward, action):
     status = ["healthy", "dead", "infectious", "susceptible"]
-    df_total['Status'] = df_total.apply(lambda x: rule(x['Infectious'], x['Susceptible'], x['GG']), axis=1)
-    daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(deep=True).reset_index()
+    df_total['Status'] = df_total.apply(
+        lambda x: rule(x['Infectious'], x['Susceptible'], x['GG']), axis=1)
+    daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(
+        deep=True).reset_index()
     daily_status["Position"] = list(zip(daily_status['x'], daily_status['y']))
     daily_status.rename(columns={"index": "Person"}, inplace=True)
     complete_status = []
@@ -186,12 +187,16 @@ def create_scatter_plot(df_total, reward, action):
     for key in scatterplot_dict:
         scatterplot_dict[key]["susceptible"] = scatterplot_dict[key]["susceptible"][0]
         scatterplot_dict[key]["infectious"] = scatterplot_dict[key]["infectious"][0]
-        scatterplot_dict[key]["total_susceptible"] = (sum(x is not None for x in scatterplot_dict[key]["susceptible"]))
+        scatterplot_dict[key]["total_susceptible"] = (
+            sum(x is not None for x in scatterplot_dict[key]["susceptible"]))
         scatterplot_dict[key]["reward"] = int(reward[key])
         scatterplot_dict[key]["action"] = int(action[key])
-        scatterplot_dict[key]["total_dead"] = (sum(x is not None for x in scatterplot_dict[key]["dead"][0]))
-        scatterplot_dict[key]["total_infectious"] = (sum(x is not None for x in scatterplot_dict[key]["infectious"]))
-        scatterplot_dict[key]["total_healthy"] = (sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
+        scatterplot_dict[key]["total_dead"] = (
+            sum(x is not None for x in scatterplot_dict[key]["dead"][0]))
+        scatterplot_dict[key]["total_infectious"] = (
+            sum(x is not None for x in scatterplot_dict[key]["infectious"]))
+        scatterplot_dict[key]["total_healthy"] = (
+            sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
         del [scatterplot_dict[key]["healthy"]]
         del [scatterplot_dict[key]["dead"]]
 
@@ -215,7 +220,7 @@ def simulate(model, df=init_state(), current_day=0):
     # Use the agent to make decisions
     # calculate reward and action
     import tensorflow as tf
-    #model = load_model("model_ann_3layer")
+    #  model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
     state = tf.reshape(state, [1, 5])
@@ -231,7 +236,6 @@ def calculate_reward_action(df=init_state()):
     import tensorflow as tf
     model = load_model("model_ann_3layer")
     economy = 0
-    #model = load_model("model_ann_3layer")
     state = current_state(df)
     state = tf.reshape(state, [1, 5])
     prediction = model.predict(state, steps=1)
@@ -281,4 +285,3 @@ if __name__ == "__main__":
             colors.append('red')
         else:
             colors.append('black')
-           

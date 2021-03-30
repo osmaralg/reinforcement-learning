@@ -1,3 +1,4 @@
 articles/migrations/*
 .idea/
 django_project
+env
