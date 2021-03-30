@@ -1,6 +1,6 @@
 # reinforment-learning
 
-.. image::  static/assets/img/caputure.JPG
+.. image::  https://raw.githubusercontent.com/osmaralg/reinforment-learning/main/static/assets/img/capture.JPG
 
 Install
 ==============
