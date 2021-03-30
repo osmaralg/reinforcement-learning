@@ -34,31 +34,17 @@ Open your browser in the address localhost:8000
 
 File Description
 -----------------
-project_emec2.py: Takes input from the reinforcement learning model and creates the necessary JSON files for further visualization.
+`project_emec2.py`: Takes input from the reinforcement learning model and creates the necessary JSON files for further visualization.
 
 `manage.py`: Contains all the commands required to run the server
 
-manage - Copy.py:
+`requirements.txt`: Contains all library requirements to run the server
 
-requirements.txt: Contains all library requirements to run the server
+`articles\functions.py`: Contains general functions used by other scripts in the repository.
 
-articles\admin.py: Registers the models.
+`articles\templates\welcome.html`: Contains Javascript and HTML scripts required for creating the dashboard
 
-articles\apps.py: 
-
-articles\functions.py: Contains general functions used by other scripts in the repository.
-
-articles\models.py:
-
-articles\views.py:
-
-articles\templates: Contains HTML scripts required for the dashboard
-
-static: Contains Javascrips, CSS, Highcharts code and other files required for the dashboard
-
-static\data\RL Model: Contains scripts for the reinfocement learning model
-
-django_project:Contains Python scripts and other files required for the dashboard
+`static\data\RL Model`: Contains scripts for the reinfocement learning model
 
 
 
