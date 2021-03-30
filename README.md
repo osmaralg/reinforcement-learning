@@ -1,4 +1,4 @@
-# reinforment-learning
+# reinforcement-learning
 
 <a href="dds-pandemic-control.com">
 <img  src="/static/assets/img/capture.JPG" alt="My cool logo"/>
