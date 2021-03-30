@@ -49,7 +49,8 @@
                     <div class="col-md-12">
                         <div class="container facts">
                         <div class="row no-gutters">
-                          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
+
+                          <div class="col-lg-2 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
 
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
@@ -58,7 +59,7 @@
                             </div>
                           </div>
 
-                          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
+                          <div class="col-lg-2 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
 
                             <div class="count-box">
                               <i class="icofont-document-folder"></i>
@@ -70,16 +71,24 @@
                           <div class="col-md-3 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
                             <div class="count-box">
                               <i class="icofont-simple-smile"></i>
-                              <span id="economyCounter" data-toggle="counter-up">0</span>
+                              <span id="rewardCounter" data-toggle="counter-up">0</span>
                               <p><strong>Reward</strong> </p>
                             </div>
                           </div>
 
-                          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
+                          <div class="col-lg-2 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
                             <div class="count-box">
                               <i class="icofont-live-support"></i>
                               <span id="deadsCounter" data-toggle="counter-up">0</span>
                               <p><strong>Deaths</strong></p>
+                            </div>
+                          </div>
+
+                         <div class="col-lg-2 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
+                            <div class="count-box">
+                              <i class="icofont-live-support"></i>
+                              <span id="policyCounter" data-toggle="counter-up">0</span>
+                              <p><strong>Policy</strong></p>
                             </div>
                           </div>
 
@@ -138,13 +147,7 @@
         <div class="section-title" data-aos="fade-up">
           <h2>Results</h2>
           <p>
-            The overall implementation is conducted using Python30, Keras31, and TensorFlow32. MatPlotLib33 is used for
-            graphical representations. The experiments are conducted in a virtual environment implemented on a quadratic
-            time complexity based algorithm, which is provided in "Supplementary file 1". We experiment with a
-            limited population of 10.000 people and a default daily movement of 15 steps. In this section, we first evaluate
-            the virtual environment by comparing it with the ODE model. Then we compare the agent’s performance based
-            on diferent memory lengths and try to resonate an optimal agent. Further, we explore the decisions and exploit
-            the strategy behind the agent’s decision.
+            The overall implementation is conducted using Python30, Keras31, and javascript. x days report for the trained model
         </p> 
         </div>
 
@@ -306,7 +309,7 @@
         var scatterPlot = ScatterPlot('State of the Pandemic', 'scatterContainer');
         var barPlot = BarPlot('barContainer')
         // Results Dashboard
-        var casesPlot = LinePlot('Active Cases', '', 'Count', 'casesContainer');
+        var casesPlot = LinePlot('Infectious', '', 'Count', 'casesContainer');
         var populationPlot = LinePlot('Susceptible', '', 'Count', 'populationContainer');
         var economyPlot = LinePlot('Reward', '', 'Reward Amount', 'economyContainer');
         var deadPlot = LinePlot('Deaths', '', 'Count', 'deadContainer');
@@ -381,8 +384,10 @@
 
             document.getElementById("dayCounter").textContent = day;
             document.getElementById("infectiousCounter").textContent = dayData['total_infectious'];
-            document.getElementById("economyCounter").textContent = dayData['total_healthy'];
+            document.getElementById("rewardCounter").textContent = dayData['reward'];
             document.getElementById("deadsCounter").textContent = dayData['total_dead'];
+            document.getElementById("policyCounter").textContent = dayData['action'];
+
         }
 
         $.getJSON( "{% static 'data/dynamic_graphs_data.json' %}", function( data ) {
@@ -401,7 +406,7 @@
                 console.log("line plots data", data)
                 casesPlot.update({ 
                         series: [ {
-                        name: 'Active Cases',
+                        name: 'Infectious',
                         data: data['Active Cases']
                     }]
                 })

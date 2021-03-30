@@ -8,7 +8,7 @@ import numpy as np
 # import time
 #import datetime
 import json
-from articles.functions import init_state, load_model, health_state, create_scatter_plot, calculate_reward_action, simulate
+from articles.functions import init_state, load_model, health_state, create_scatter_plot, calculate_reward_action
 
 reward = []
 action= []
@@ -20,12 +20,11 @@ model = load_model('articles/model_ann_3layer')
 KPI_df = pd.DataFrame()
 
 for day in range(days):
-    print("day", day)
-    df, daily_reward, daily_action = simulate(model, df=df)
-    #df, daily_reward, daily_action = calculate_reward_action(df=df)
+
+    df, daily_reward, daily_action = calculate_reward_action(model, df=df)
     df['Day'] = day
     reward.append(daily_reward)
-    action.append(daily_action)    
+    action.append(daily_action)
     daily_KPI = health_state(df=df)
     KPI_df = KPI_df.append(pd.DataFrame(daily_KPI).T)
     df_total = pd.concat([df_total, df], axis=0)
@@ -37,7 +36,7 @@ KPI_df.rename(columns = {0:'Cured Cases', 1:'Susceptible', 2:'Exposed', 3:'Infec
 static_graph_df = KPI_df[['Susceptible', 'Infectious', 'Newly Infected','Death Cases']].copy(deep=True)
 static_graph = static_graph_df.to_dict("list")
 static_graph["Reward"] = reward
-static_graph["Action"] = action    
+static_graph["Action"] = action
 
 for key in static_graph:
     for value in range(len(static_graph[key])):
@@ -50,7 +49,6 @@ with open('static/data/dynamic_graphs_data.json', 'w', encoding='utf-8') as f:
 with open('static/data/static_graphs_data.json', 'w', encoding='utf-8') as j:
     json.dump(static_graph, j, ensure_ascii=False, indent=4)
     j.close()
-
 
 
 

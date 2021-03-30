@@ -28,14 +28,14 @@ economy = 0  # Daily economic transaction
 
 # Inputs
 s = 50  # size of the grid
-N = 100  # size of population
-M = round(N * 0.007)  # Number of infectious population
-Et = 1  # Number of days staying exposed (Incubation rate)
+N = 1000  # size of population
+M = round(N * 0.07)  # Number of infectious population
+Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
-Mt = 10  # Number of daily movements
-D = 100  # Number of days
+Mt = 5  # Number of daily movements
+D = 200  # Number of days
 death_rate = 100
-expose_rate = 3 # transmission rate
+expose_rate = 5
 
 # Initialization
 S = N - M  # Susceptible population
@@ -43,6 +43,8 @@ E = 0  # Exposed population
 I = M  # Number of infectious population
 R = 0  # Recovered population
 P = S + E + I + R  # Total population
+economy = 0  # Daily economic transaction
+
 
 # %%
 
@@ -68,6 +70,16 @@ def init_state():  # init
 
     return df
 
+def health_state(df):
+    #calculate health status
+    act = len(df.loc[df['Infectious'] > 0])
+    inf = len(df.loc[df['Infectious'] == 1])
+    exposed = len(df.loc[df['Exposed'] > 0])
+    recovered = len(df.loc[df['Recovered'] == True])
+    sus = len(df.loc[df['Susceptible'] == True])
+    gg = df.loc[df['GG'] == True].GG.count()
+    #print(inf)
+    return np.array([recovered, sus, exposed, act, inf, gg])
 
 def load_model(path):
     from tensorflow import keras
@@ -115,15 +127,29 @@ def one_day(df, action=0):
                                 df_infectious.drop([index])
                             df.at[index, 'Recovered'] = True  # Recover the person
                     elif mt + 1 == moves_under_policy:
-                        df.at[index, 'Infectious'] = person['Infectious'] + 1  # Increase the infectious day counter
-                elif (person['Exposed'] > 0) and (person['Infectious'] == 0):  # If a person is in exposed state
+                        if person['Infectious'] == 0.5:
+                            df.at[index, 'Infectious'] = 1
+                        else:
+                            df.at[index, 'Infectious'] = person['Infectious'] + 1  # Increase the infectious day counter
 
-                    if (person['Exposed'] - random.choice(range(0, 2))) >= Et:  # If the person has reached the exposed day limit?  7
+
+                        # print(f'No. {index} infected {person.Infectious} in day {d} at {mt}')
+
+
+                elif person['Exposed'] > 0:  # If a person is in exposed state
+
+                    if (person['Exposed'] - random.choice(range(0, 10))) >= Et:  # If the person has reached the exposed day limit?  7
+                        print(f'*When No. {index} infected, Exposure is {person.Exposed} in day {d} at move {mt}')
+
                         df.at[index, 'Exposed'] = 0
-                        df.at[index, 'Infectious'] = 1  # Increase the infectious day counter, now the person is infectious
+                        df.at[index, 'Infectious'] = 0.5 if mt+1 != moves_under_policy else 1  # Increase the infectious day counter, now the person is infectious
                         df_infectious.append(person)
-                    elif mt + 1 == moves_under_policy:
-                        df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
+                    elif mt + 1 == moves_under_policy: # At the end of the day
+                        if person['Exposed'] == 0.5:
+                            df.at[index, 'Exposed'] = 1
+                        else:
+                            df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
+                        print(f'No. {index} exposure increased to {df.at[index, "Exposed"]} in day {d} at {mt}')
 
                 elif person['Susceptible']:  # If the person is in susceptible state
 
@@ -136,9 +162,8 @@ def one_day(df, action=0):
                         df_ytemp = df_infectious[['y']].to_numpy()
                         if (y_temp in df_ytemp) or ((y_temp - 1) in df_ytemp) or ((y_temp + 1) in df_ytemp):
                             if random.choice(range(0, expose_rate)) > (expose_rate - 2):
-                                df.at[index, 'Exposed'] = 1
+                                df.at[index, 'Exposed'] = 0.5 if mt+1 != moves_under_policy else 1
                                 df.at[index, 'Susceptible'] = False
-    # print("--- %s seconds ---" % (time.time() - start_time))
 
     return df  # time.time() - start_time #
 
@@ -147,24 +172,17 @@ def economy_gain(df):
     economy_gain = len(df[(df.GG == False) & (df.Infectious == 0)]) * round(random.uniform(0.8, 1), 2)
     return economy_gain
 
-def current_state(df):
-    act = len(df.loc[df['Infectious'] > 0])
-    exposed = len(df.loc[df['Exposed'] > 0])
-    recovered = len(df.loc[df['Recovered'] == True])
-    sus = len(df.loc[df['Susceptible'] == True])
-    gg = df.loc[df['GG'] == True].GG.count()
-    return np.array([recovered, sus, exposed, act, gg])
 
-def health_state(df):
-    #calculate health status
-    act = len(df.loc[df['Infectious'] > 0])
-    inf = len(df.loc[df['Infectious'] == 1])
-    exposed = len(df.loc[df['Exposed'] > 0])
+def current_state(df):
+    global economy
+    active_cases = len(df.loc[df['Infectious'] > 0])
+    new_inf = len(df.loc[df['Infectious'] == 1])
     recovered = len(df.loc[df['Recovered'] == True])
-    sus = len(df.loc[df['Susceptible'] == True])
-    gg = df.loc[df['GG'] == True].GG.count()
-    #print(inf)
-    return np.array([recovered, sus, exposed, act, inf, gg])
+    gg = len(df.loc[df['GG'] == True])
+    reproduction_rate = len(df.loc[df['Infectious'] == 1]) / len(df.loc[df['Infectious'] > 1]) if len(df.loc[df['Infectious'] > 1]) > 0 else 0
+    economy = economy + economy_gain(df)
+
+    return np.array([active_cases, new_inf, recovered, gg, reproduction_rate, economy])
 
 
 def rule(infections, susceptible, dead):
@@ -233,10 +251,9 @@ def create_scatter_plot(df_total, reward, action):
 
 def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
-    # calculate reward and action
-    import tensorflow as tf
-    model = load_model("model_ann_3layer")
+
     economy = 0
+    model = load_model("model_ann_3layer")
     state = current_state(df)
     state = tf.reshape(state, [1, 5])
     prediction = model.predict(state, steps=1)
@@ -244,15 +261,17 @@ def simulate(df=init_state(), current_day=0):
     df = one_day(df, action=action_by_agent)
     gain = economy_gain(df)
     economy += gain
-    return df, gain, action_by_agent
+    #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
+    plot_dict = create_scatter_plot(df)
+    return plot_dict
 
-def calculate_reward_action(df=init_state()):
+def calculate_reward_action(model, df=init_state()):
     # calculate reward and action
     import tensorflow as tf
-    model = load_model("model_ann_3layer")
+    #model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
-    state = tf.reshape(state, [1, 5])
+    state = tf.reshape(state, [1, 6])
     prediction = model.predict(state, steps=1)
     action_by_agent = np.argmax(prediction)
     df = one_day(df, action=action_by_agent)
