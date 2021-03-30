@@ -26,16 +26,16 @@ import json
 
 economy = 0  # Daily economic transaction
 
-# Inputs
-s = 50  # size of the grid
-N = 1000  # size of population
-M = round(N * 0.07)  # Number of infectious population
-Et = 2  # Number of days staying exposed
-It = 21  # Number of days staying infectious
-Mt = 5  # Number of daily movements
-D = 200  # Number of days
+#Inputs
+s = 200 #size of the grid
+N = 1000 #size of population
+M = round(N * 0.007) #Number of infectious population
+Et = 2 #Number of days staying exposed
+It = 21 #Number of days staying infectious
+Mt = 8 #Number of daily movements
+D = 100 #Number of days
 death_rate = 100
-expose_rate = 5
+expose_rate = 10
 
 # Initialization
 S = N - M  # Susceptible population
@@ -139,7 +139,7 @@ def one_day(df, action=0):
                 elif person['Exposed'] > 0:  # If a person is in exposed state
 
                     if (person['Exposed'] - random.choice(range(0, 10))) >= Et:  # If the person has reached the exposed day limit?  7
-                        print(f'*When No. {index} infected, Exposure is {person.Exposed} in day {d} at move {mt}')
+                        #print(f'*When No. {index} infected, Exposure is {person.Exposed} in day {d} at move {mt}')
 
                         df.at[index, 'Exposed'] = 0
                         df.at[index, 'Infectious'] = 0.5 if mt+1 != moves_under_policy else 1  # Increase the infectious day counter, now the person is infectious
@@ -149,7 +149,7 @@ def one_day(df, action=0):
                             df.at[index, 'Exposed'] = 1
                         else:
                             df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
-                        print(f'No. {index} exposure increased to {df.at[index, "Exposed"]} in day {d} at {mt}')
+                            #print(f'No. {index} exposure increased to {df.at[index, "Exposed"]} in day {d} at {mt}')
 
                 elif person['Susceptible']:  # If the person is in susceptible state
 
