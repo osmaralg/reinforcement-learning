@@ -8,12 +8,12 @@ import numpy as np
 # import time
 #import datetime
 import json
-from articles.functions import init_state, load_model, current_state, create_scatter_plot, calculate_reward_action, simulate
+from articles.functions import init_state, load_model, health_state, create_scatter_plot, calculate_reward_action, simulate
 
 reward = []
 action= []
 daily_KPI = []
-days = 200
+days = 30
 df = init_state()
 df_total = pd.DataFrame()
 #model = load_model('articles/model_ann_3layer')
@@ -25,16 +25,16 @@ for day in range(days):
     df, daily_reward, daily_action = calculate_reward_action(df=df)
     df['Day'] = day
     reward.append(daily_reward)
-    action.append(daily_action)
-    print(day)
-    daily_KPI = current_state(df=df)
+    action.append(daily_action)    
+    daily_KPI = health_state(df=df)
     KPI_df = KPI_df.append(pd.DataFrame(daily_KPI).T)
     df_total = pd.concat([df_total, df], axis=0)
+    print(day)
 
 scatterplot_dict = create_scatter_plot(df_total, reward, action)
 
-KPI_df.rename(columns = {0:'Cured Cases', 1:'Susceptible', 2:'Exposed', 3:'Active Cases', 4:'Death Cases'}, inplace=True)
-static_graph_df = KPI_df[['Susceptible', 'Active Cases', 'Death Cases']].copy(deep=True)
+KPI_df.rename(columns = {0:'Cured Cases', 1:'Susceptible', 2:'Exposed', 3:'Infectious', 4:'Newly Infected' , 5:'Death Cases'}, inplace=True)
+static_graph_df = KPI_df[['Susceptible', 'Infectious', 'Newly Infected','Death Cases']].copy(deep=True)
 static_graph = static_graph_df.to_dict("list")
 static_graph["Reward"] = reward
 static_graph["Action"] = action    

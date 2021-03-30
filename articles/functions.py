@@ -28,7 +28,7 @@ economy = 0  # Daily economic transaction
 
 # Inputs
 s = 50  # size of the grid
-N = 1000  # size of population
+N = 100  # size of population
 M = round(N * 0.007)  # Number of infectious population
 Et = 1  # Number of days staying exposed (Incubation rate)
 It = 21  # Number of days staying infectious
@@ -148,13 +148,39 @@ def economy_gain(df):
     return economy_gain
 
 def current_state(df):
-    inf = len(df.loc[df['Infectious'] > 0])
+    act = len(df.loc[df['Infectious'] > 0])
     exposed = len(df.loc[df['Exposed'] > 0])
     recovered = len(df.loc[df['Recovered'] == True])
     sus = len(df.loc[df['Susceptible'] == True])
     gg = df.loc[df['GG'] == True].GG.count()
-    print(inf)
-    return np.array([recovered, sus, exposed, inf, gg])
+    return np.array([recovered, sus, exposed, act, gg])
+
+def health_state(df):
+    #calculate health status
+    act = len(df.loc[df['Infectious'] > 0])
+    inf = len(df.loc[df['Infectious'] == 1])
+    exposed = len(df.loc[df['Exposed'] > 0])
+    recovered = len(df.loc[df['Recovered'] == True])
+    sus = len(df.loc[df['Susceptible'] == True])
+    gg = df.loc[df['GG'] == True].GG.count()
+    #print(inf)
+    return np.array([recovered, sus, exposed, act, inf, gg])
+
+
+def rule(infections, susceptible, dead):
+    if not dead:
+        if infections > 0:
+            return "infectious"
+        elif infections == 1:
+            return "newly infected"  
+        elif susceptible:
+            return "susceptible"
+        elif infections == 0 and not susceptible and not dead:
+            return "healthy"
+    elif dead:
+        return "dead"
+    else:
+        return np.nan
 
 
 # %%
@@ -203,24 +229,12 @@ def create_scatter_plot(df_total, reward, action):
     return scatterplot_dict
 
 
-def rule(infections, susceptible, dead):
-    if infections > 0 and not susceptible and not dead:
-        return "infectious"
-    elif susceptible and not dead:
-        return "susceptible"
-    elif infections == 0 and not susceptible and not dead:
-        return "healthy"
-    elif dead:
-        return "dead"
-    else:
-        return np.nan
 
-
-def simulate(model, df=init_state(), current_day=0):
+def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
     # calculate reward and action
     import tensorflow as tf
-    #  model = load_model("model_ann_3layer")
+    model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
     state = tf.reshape(state, [1, 5])
@@ -269,8 +283,8 @@ def simulate(df=reset(), current_day=0, usecase):
         return plot_dict
     if usecase == "calc":
         return gain, action_by_agent
-
 """
+
 
 if __name__ == "__main__":
 
@@ -285,3 +299,4 @@ if __name__ == "__main__":
             colors.append('red')
         else:
             colors.append('black')
+            
