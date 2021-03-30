@@ -1,5 +1,7 @@
 # reinforment-learning
 
+.. image::  /static/assets/img/caputure.JPG
+
 Install
 ==============
 
