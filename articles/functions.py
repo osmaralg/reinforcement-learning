@@ -287,34 +287,3 @@ def simulate(df=reset(), current_day=0, usecase):
 """
 
 
-if __name__ == "__main__":
-
-<<<<<<< HEAD
-    df = simulate()
-    colors = []
-    result = []
-    df_dict = df.to_dict('index')
-
-    for key in df_dict:
-        result.append(df_dict[key])
-        if df_dict[key]['Infectious']:
-            colors.append('red')
-        else:
-            colors.append('black')
-            
-=======
-    '''
-        df = simulate()
-        colors = []
-        result = []
-        df_dict = df.to_dict('index')
-    
-        for key in df_dict:
-            result.append(df_dict[key])
-            if df_dict[key]['Infectious']:
-                colors.append('red')
-            else:
-                colors.append('black')
-
-    '''
->>>>>>> 60fd3b8 (sync counter and barplot)
