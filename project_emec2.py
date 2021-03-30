@@ -1,6 +1,6 @@
 # %%
-#import sys
-#sys.path.append('C:/Users/mahit/Documents/MSc/RWTH/3rd sem/EMEC_Project/reinforment-learning')
+import sys
+sys.path.append('C:/Users/mahit/Documents/MSc/RWTH/3rd sem/EMEC_Project/reinforment-learning')
 
 import pandas as pd
 import numpy as np
@@ -12,31 +12,42 @@ from articles.functions import init_state, load_model, health_state, create_scat
 
 reward = []
 action= []
-daily_KPI = []
 days = 30
 df = init_state()
 df_total = pd.DataFrame()
-model = load_model('articles/model_ann_3layer')
-KPI_df = pd.DataFrame()
+#model = load_model('articles/model_ann_3layer')
 
 for day in range(days):
 
-    df, daily_reward, daily_action = calculate_reward_action(model, df=df)
+    df, daily_reward, daily_action = calculate_reward_action(df=df)
     df['Day'] = day
     reward.append(daily_reward)
     action.append(daily_action)
-    daily_KPI = health_state(df=df)
-    KPI_df = KPI_df.append(pd.DataFrame(daily_KPI).T)
     df_total = pd.concat([df_total, df], axis=0)
     print(day)
 
 scatterplot_dict = create_scatter_plot(df_total, reward, action)
-
-KPI_df.rename(columns = {0:'Cured Cases', 1:'Susceptible', 2:'Exposed', 3:'Infectious', 4:'Newly Infected' , 5:'Death Cases'}, inplace=True)
-static_graph_df = KPI_df[['Susceptible', 'Infectious', 'Newly Infected','Death Cases']].copy(deep=True)
-static_graph = static_graph_df.to_dict("list")
+total_inf=[]
+total_sus=[]
+total_dead=[]
+total_newinf=[]
+for key in scatterplot_dict:
+    inf = scatterplot_dict[key]["total_infectious"]
+    total_inf.append(inf)
+    sus = scatterplot_dict[key]["total_susceptible"]
+    total_sus.append(sus)
+    dead = scatterplot_dict[key]["total_dead"]
+    total_dead.append(dead)
+    newinf = scatterplot_dict[key]["total_newly_infected"]
+    total_newinf.append(newinf)
+    
+static_graph = {}
 static_graph["Reward"] = reward
-static_graph["Action"] = action
+static_graph["Action"] = action   
+static_graph["Infectious"] = total_inf 
+static_graph["Susceptible"] = total_sus
+static_graph["Death Cases"] = total_dead
+static_graph["Newly Infected"] = total_newinf
 
 for key in static_graph:
     for value in range(len(static_graph[key])):

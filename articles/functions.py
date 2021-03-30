@@ -10,8 +10,8 @@ Original file is located at
 # %%
 
 import numpy as np
-#import sys
-#sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
+import sys
+sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
 
 import pandas as pd
 import random
@@ -206,7 +206,7 @@ def rule(infections, susceptible, dead):
 
 
 def create_scatter_plot(df_total, reward, action):
-    status = ["healthy", "dead", "infectious", "susceptible"]
+    status = ["healthy", "dead", "infectious", "susceptible", "newly infected"]
     df_total['Status'] = df_total.apply(
         lambda x: rule(x['Infectious'], x['Susceptible'], x['GG']), axis=1)
     daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(
@@ -240,10 +240,13 @@ def create_scatter_plot(df_total, reward, action):
             sum(x is not None for x in scatterplot_dict[key]["dead"][0]))
         scatterplot_dict[key]["total_infectious"] = (
             sum(x is not None for x in scatterplot_dict[key]["infectious"]))
+        scatterplot_dict[key]["total_newly_infected"] = (
+            sum(x is not None for x in scatterplot_dict[key]["newly infected"][0]))
         scatterplot_dict[key]["total_healthy"] = (
             sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
         del [scatterplot_dict[key]["healthy"]]
         del [scatterplot_dict[key]["dead"]]
+        del [scatterplot_dict[key]["newly infected"]]
 
     return scatterplot_dict
 
@@ -251,11 +254,11 @@ def create_scatter_plot(df_total, reward, action):
 
 def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
-
+    import tensorflow as tf
     economy = 0
     model = load_model("model_ann_3layer")
     state = current_state(df)
-    state = tf.reshape(state, [1, 5])
+    state = tf.reshape(state, [1, 6])
     prediction = model.predict(state, steps=1)
     action_by_agent = np.argmax(prediction)
     df = one_day(df, action=action_by_agent)
@@ -265,10 +268,10 @@ def simulate(df=init_state(), current_day=0):
     plot_dict = create_scatter_plot(df)
     return plot_dict
 
-def calculate_reward_action(model, df=init_state()):
+def calculate_reward_action(df=init_state()):
     # calculate reward and action
     import tensorflow as tf
-    #model = load_model("model_ann_3layer")
+    model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
     state = tf.reshape(state, [1, 6])
@@ -278,31 +281,4 @@ def calculate_reward_action(model, df=init_state()):
     gain = economy_gain(df)
     economy += gain
     return df, gain, action_by_agent
-
-"""
-alternatively function simulate can be changed as below:
-( another parameter has to be added
- the line that calls the function will have to be changed everywhere
- i have left it as a comment where i also call the function in project_emec2.py line 183)
-
-def simulate(df=reset(), current_day=0, usecase):
-    # Use the agent to make decisions
-
-    economy = 0
-    model = load_model("model_ann_3layer")
-    state = current_state(df)
-    state = tf.reshape(state, [1, 5])
-    prediction = model.predict(state, steps=1)
-    action_by_agent = np.argmax(prediction)
-    df = one_day(df, action=action_by_agent)
-    gain = economy_gain(df)
-    economy += gain
-    #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
-    plot_dict = create_scatter_plot(df)
-    if usecase == "plot":
-        return plot_dict
-    if usecase == "calc":
-        return gain, action_by_agent
-"""
-
 
