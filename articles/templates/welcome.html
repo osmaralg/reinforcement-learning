@@ -449,37 +449,37 @@ In the future, we would like to continue training this model further and play ar
                 casesPlot.update({ 
                         series: [ {
                         name: 'Infectious',
-                        data: data['Infectious'].splice(0,50)
+                        data: data['Infectious'].splice(0, 60)
                     }]
                 })
                 populationPlot.update({ 
                         series: [ {
                         name: 'Susceptible',
-                        data: data['Susceptible']
+                        data: data['Susceptible'].splice(0, 60)
                     }]
                 })
                 economyPlot.update({ 
                         series: [ {
                         name: 'Reward',
-                        data: data['Reward']
+                        data: data['Reward'].splice(0, 60)
                     }]
                 })
                 deadPlot.update({ 
                         series: [ {
                         name: 'Dead',
-                        data: data['Death Cases']
+                        data: data['Death Cases'].splice(0, 60)
                     }]
                 })
                 policyPlot.update({ 
                         series: [ {
                         name: 'Policy',
-                        data: data['Action']
+                        data: data['Action'].splice(0, 60)
                     }]
                 })
                 newDaylyPlot.update({ 
                         series: [ {
                         name: 'New Dayly Cases',
-                        data: data['Newly Infected']
+                        data: data['Newly Infected'].splice(0, 60)
                     }]
                 })
 
