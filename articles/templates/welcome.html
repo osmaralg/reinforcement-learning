@@ -39,10 +39,13 @@
 
         <div class="section-title">
           <h2>Environment</h2>
-            <p>The virtual environment contains a population of 10.000 people, in which, 70 (0.7%) of them are infectious. It is is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02. 
+            <p>The virtual environment contains a population of 1000 people, in which, 0.7 of them are infectious. 
             </br>
             </br>
-            The below counter showcases the day, the economic contribution of the population number of active cases and deaths.The graphs represent the movement of people and their health status throughout 1 month corresponding to the day shown on the counter. </p>
+            The policy is defined as how strict the lockdown should be. Policy 0 indicates a full lockdown, policy 1 indicates a 75% lockdown and policy 2 indicates a 50% lockdown.
+            </br>
+            </br>
+            The below counter showcases the day, the economic contribution of the population, number of active cases and deaths.The graphs represent the movement of people and their health status throughout 1 month corresponding to the day shown on the counter. </p>
               <div class="container">
                 <div class="row">
 
@@ -147,7 +150,10 @@
         <div class="section-title" data-aos="fade-up">
           <h2>Results</h2>
           <p>
-            The overall implementation is conducted using Python30, Keras31, and javascript. x days report for the trained model
+            The overall implementation is conducted using Python30, Keras31, and javascript. Results from the trained model are shown below. This represents changes in various metrics over 200 days for 1000 people. 
+          </br>
+          </br>
+          Please note that the newly infected cases are not included in the infectious cases.
         </p> 
         </div>
 
@@ -321,7 +327,7 @@
         var economyPlot = LinePlot('Reward', '', 'Reward Amount', 'economyContainer');
         var deadPlot = LinePlot('Deaths', '', 'Count', 'deadContainer');
         var policyPlot = LinePlot('Policies', '', 'Policy Selected', 'policyContainer');
-        var newDaylyPlot = LinePlot('New Dayly Cases', '', 'New Dayly Cases', 'newDaylyContainer');
+        var newDaylyPlot = LinePlot('New Daily Cases', '', 'Number', 'newDaylyContainer');
 
 
 
