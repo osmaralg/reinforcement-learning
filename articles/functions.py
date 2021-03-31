@@ -12,7 +12,7 @@ Original file is located at
 import numpy as np
 #import sys
 #sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
-
+import tensorflow as tf
 import pandas as pd
 import random
 import json
@@ -28,8 +28,8 @@ economy = 0  # Daily economic transaction
 
 # Inputs
 s = 50  # size of the grid
-N = 1000  # size of population
-M = round(N * 0.07)  # Number of infectious population
+N = 100  # size of population
+M = round(N * 0.7)  # Number of infectious population
 Et = 2  # Number of days staying exposed
 It = 21  # Number of days staying infectious
 Mt = 5  # Number of daily movements
@@ -69,17 +69,6 @@ def init_state():  # init
     df['y'] = np.random.randint(0, s, size=len(df))
 
     return df
-
-def health_state(df):
-    #calculate health status
-    act = len(df.loc[df['Infectious'] > 0])
-    inf = len(df.loc[df['Infectious'] == 1])
-    exposed = len(df.loc[df['Exposed'] > 0])
-    recovered = len(df.loc[df['Recovered'] == True])
-    sus = len(df.loc[df['Susceptible'] == True])
-    gg = df.loc[df['GG'] == True].GG.count()
-    #print(inf)
-    return np.array([recovered, sus, exposed, act, inf, gg])
 
 def load_model(path):
     from tensorflow import keras
@@ -139,7 +128,7 @@ def one_day(df, action=0):
                 elif person['Exposed'] > 0:  # If a person is in exposed state
 
                     if (person['Exposed'] - random.choice(range(0, 10))) >= Et:  # If the person has reached the exposed day limit?  7
-                        print(f'*When No. {index} infected, Exposure is {person.Exposed} in day {d} at move {mt}')
+                        #print(f'*When No. {index} infected, Exposure is {person.Exposed} in day {d} at move {mt}')
 
                         df.at[index, 'Exposed'] = 0
                         df.at[index, 'Infectious'] = 0.5 if mt+1 != moves_under_policy else 1  # Increase the infectious day counter, now the person is infectious
@@ -149,7 +138,7 @@ def one_day(df, action=0):
                             df.at[index, 'Exposed'] = 1
                         else:
                             df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
-                        print(f'No. {index} exposure increased to {df.at[index, "Exposed"]} in day {d} at {mt}')
+                        #print(f'No. {index} exposure increased to {df.at[index, "Exposed"]} in day {d} at {mt}')
 
                 elif person['Susceptible']:  # If the person is in susceptible state
 
@@ -184,21 +173,33 @@ def current_state(df):
 
     return np.array([active_cases, new_inf, recovered, gg, reproduction_rate, economy])
 
+def health_state(df):
+    global economy
+    active_cases = df['Infectious'].values[0]
+    recovered = len(df.loc[df['Recovered'] == True])
+    gg = len(df.loc[df['GG'] == True])
+    sus = len(df.loc[df['Susceptible'] == True])
+    
+    return np.array([active_cases, recovered, gg, sus])
 
-def rule(infections, susceptible, dead):
-    if not dead:
-        if infections > 0:
-            return "infectious"
-        elif infections == 1:
-            return "newly infected"  
-        elif susceptible:
-            return "susceptible"
-        elif infections == 0 and not susceptible and not dead:
-            return "healthy"
-    elif dead:
+
+def rule(df):
+    row = df.to_frame()
+    row_t = row.T
+    state = health_state(row_t)    
+    if state[2] > 0:
         return "dead"
+    elif state[0] == 0:
+        return "healthy"
+    elif state[3] > 0:
+        return "susceptible"
+    elif state[0] > 1:
+        return "infectious"
+    elif state[0] == 1:
+        return "newly infected" 
+               
     else:
-        return np.nan
+        return "none"
 
 
 
@@ -207,10 +208,8 @@ def rule(infections, susceptible, dead):
 
 def create_scatter_plot(df_total, reward, action):
     status = ["healthy", "dead", "infectious", "susceptible", "newly infected"]
-    df_total['Status'] = df_total.apply(
-        lambda x: rule(x['Infectious'], x['Susceptible'], x['GG']), axis=1)
-    daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(
-        deep=True).reset_index()
+    df_total['Status'] = df_total.apply(lambda x: rule(x), axis=1)
+    daily_status = df_total[['x', 'y', 'Day', 'Status']].copy(deep=True).reset_index()
     daily_status["Position"] = list(zip(daily_status['x'], daily_status['y']))
     daily_status.rename(columns={"index": "Person"}, inplace=True)
     complete_status = []
@@ -219,13 +218,12 @@ def create_scatter_plot(df_total, reward, action):
         for stat in status:
             if stat not in daily_status.at[i, "Status"]:
                 complete_status.append({"Position": None, "Status": stat, "Day": daily_status.at[i, "Day"],
-                                        "Person": daily_status.at[i, "Person"]})
+                                        "Person": daily_status.at[i, "Person"]}) #code to fill in missing positions
     complete_status_df = pd.DataFrame(complete_status)
     complete_status_df.Position = complete_status_df.Position.apply(lambda x: list(x) if type(x) == tuple else x)
     complete_status_df.sort_values(['Day', 'Person'], ascending=[True, True], inplace=True)
     # complete_status_df.to_excel('output1.xlsx')
-    # limited_status = complete_status_df.drop(complete_status_df[(complete_status_df['Status'] == "healthy") | (complete_status_df['Status'] == "dead")].index)
-
+   
     scatterplot = complete_status_df.groupby(['Day', 'Status'], as_index=False)['Position'].apply(list).to_frame()
     scatterplot_dict = {level: scatterplot.xs(level).to_dict('index') for level in scatterplot.index.levels[0]}
     # for every day and every person and every status we need an entry
@@ -237,16 +235,22 @@ def create_scatter_plot(df_total, reward, action):
         scatterplot_dict[key]["reward"] = int(reward[key])
         scatterplot_dict[key]["action"] = int(action[key])
         scatterplot_dict[key]["total_dead"] = (
-            sum(x is not None for x in scatterplot_dict[key]["dead"][0]))
+            sum(x is not None for x in scatterplot_dict[key]["dead"][0]))        
         scatterplot_dict[key]["total_infectious"] = (
-            sum(x is not None for x in scatterplot_dict[key]["infectious"]))
+            sum(x is not None for x in scatterplot_dict[key]["infectious"])) 
         scatterplot_dict[key]["total_newly_infected"] = (
             sum(x is not None for x in scatterplot_dict[key]["newly infected"][0]))
-        scatterplot_dict[key]["total_healthy"] = (
-            sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
-        del [scatterplot_dict[key]["healthy"]]
-        del [scatterplot_dict[key]["dead"]]
-        del [scatterplot_dict[key]["newly infected"]]
+        scatterplot_dict[key]["total_healthy"] = (sum(x is not None for x in scatterplot_dict[key]["healthy"][0]))
+    
+    for key in scatterplot_dict:
+        if "healthy" in scatterplot_dict[key]:
+            del [scatterplot_dict[key]["healthy"]] 
+        if "dead" in scatterplot_dict[key]: 
+            del [scatterplot_dict[key]["dead"]]
+        if "newly infected" in scatterplot_dict[key]:
+            del [scatterplot_dict[key]["newly infected"]] 
+        if "none" in scatterplot_dict[key]:
+            del [scatterplot_dict[key]["none"]] 
 
     return scatterplot_dict
 
@@ -254,7 +258,7 @@ def create_scatter_plot(df_total, reward, action):
 
 def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
-    import tensorflow as tf
+    #import tensorflow as tf
     economy = 0
     model = load_model("model_ann_3layer")
     state = current_state(df)
@@ -265,12 +269,12 @@ def simulate(df=init_state(), current_day=0):
     gain = economy_gain(df)
     economy += gain
     #print(f"Day {current_day + 1}: take action {action_by_agent}, total_reward: {economy}. {prediction}")
-    plot_dict = create_scatter_plot(df)
+    plot_dict = create_scatter_plot(df, gain, action_by_agent)
     return plot_dict
 
 def calculate_reward_action(model, df=init_state()):
     # calculate reward and action
-    import tensorflow as tf
+    #import tensorflow as tf
     #model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
