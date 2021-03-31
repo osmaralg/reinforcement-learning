@@ -16,10 +16,10 @@ action= []
 days = 100
 df = init_state()
 df_total = pd.DataFrame()
-model = load_model('articles/model_ann_3layer')
+model = load_model('articles/model_ann_4_6_states_BoltzmannQPolicy')
 
 for day in range(days):
-
+    print(day)
 
     df, daily_reward, daily_action = calculate_reward_action(tf, model, df=df)
     df['Day'] = day
