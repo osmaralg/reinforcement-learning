@@ -26,16 +26,16 @@ import json
 
 economy = 0  # Daily economic transaction
 
-# Inputs
-s = 50  # size of the grid
-N = 100  # size of population
-M = round(N * 0.7)  # Number of infectious population
-Et = 2  # Number of days staying exposed
-It = 21  # Number of days staying infectious
-Mt = 5  # Number of daily movements
-D = 200  # Number of days
+#Inputs
+s = 200 #size of the grid
+N = 1000 #size of population
+M = round(N * 0.007) #Number of infectious population
+Et = 2 #Number of days staying exposed
+It = 21 #Number of days staying infectious
+Mt = 8 #Number of daily movements
+D = 100 #Number of days
 death_rate = 100
-expose_rate = 5
+expose_rate = 10
 
 # Initialization
 S = N - M  # Susceptible population
@@ -138,7 +138,9 @@ def one_day(df, action=0):
                             df.at[index, 'Exposed'] = 1
                         else:
                             df.at[index, 'Exposed'] = person['Exposed'] + 1  # Increase the exposed day counter
+
                         #print(f'No. {index} exposure increased to {df.at[index, "Exposed"]} in day {d} at {mt}')
+
 
                 elif person['Susceptible']:  # If the person is in susceptible state
 
@@ -201,10 +203,7 @@ def rule(df):
     else:
         return "none"
 
-
-
 # %%
-
 
 def create_scatter_plot(df_total, reward, action):
     status = ["healthy", "dead", "infectious", "susceptible", "newly infected"]
@@ -260,7 +259,7 @@ def simulate(df=init_state(), current_day=0):
     # Use the agent to make decisions
     #import tensorflow as tf
     economy = 0
-    model = load_model("model_ann_3layer")
+    model = load_model("model_ann_3layer2.pb")
     state = current_state(df)
     state = tf.reshape(state, [1, 6])
     prediction = model.predict(state, steps=1)
@@ -272,9 +271,9 @@ def simulate(df=init_state(), current_day=0):
     plot_dict = create_scatter_plot(df, gain, action_by_agent)
     return plot_dict
 
-def calculate_reward_action(model, df=init_state()):
+def calculate_reward_action(tf, model, df=init_state()):
     # calculate reward and action
-    #import tensorflow as tf
+
     #model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
