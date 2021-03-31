@@ -5,6 +5,7 @@ import sys
 
 DEBUG = True
 
+# production
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_project.settings')
     try:
@@ -17,6 +18,7 @@ def main():
         ) from exc
     execute_from_command_line(sys.argv)
 
+# localhost
 def test():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
     try:

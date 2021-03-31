@@ -1,4 +1,5 @@
 articles/migrations/*
+manage.py
 .idea/
 django_project
 env
