@@ -39,12 +39,14 @@
 
         <div class="section-title">
           <h2>Environment</h2>
-            <p>The virtual environment contains a population of 1000 people, in which, 0.7 of them are infectious. It is is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02. The expose rate is set to 10 and the death rate is set to 100. We assume that a person is infectious for 21 days and makes 8 movements per day.
+            <p>The virtual environment contains a limited population of 1,000 people, in which 7 of them are infectious. It is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02. The expose rate is set to 10 and the death rate is set to 100. We assume that a person is infectious for atleast 21 days and makes 8 movements per day.
             </br>
             </br>
-            The policy is defined as how strict the lockdown should be. Policy 0 indicates a full lockdown, policy 1 indicates a 75% lockdown and policy 2 indicates a 50% lockdown.
+            The policy is defined as how strict the lockdown should be. Policy 0 indicates a no lockdown, policy 1 indicates a 75% lockdown and policy 2 indicates a 25% lockdown.
             </br>
-            The decision makers goal is to find such a policy that will cause it to acquire the maximum possible economic reward. The reward function contains three parameters from the environment: the current economy ratio, the current cumulative death ratio, and the current percentage of active cases.
+            The decision makers goal is to find such a policy that it will cause them to acquire the possible economic gain long-term. The reward function is the daily economic gain.
+            </br>
+            Everyday the agent can see the number of people newly infected, active cases, recovered cases, deaths and the reproduction rate. 
             </br>
             </br>
             The below counter showcases the day, the economic contribution of the population, number of active cases and deaths. The graphs represent the movement of people and their health status throughout 1 month corresponding to the day shown on the counter. </p>
