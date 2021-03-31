@@ -19,7 +19,7 @@
         <div class="section-title">
           <h2>About</h2>
           <h3>Exploring optimal control of epidemic spread using reinforcement learning</h3>
-            <p>During a pandemic, decisions on interventions must be made to reduce or contain the disease spread, and they must be made fast. Public health officials must determine each following step, from closing schools to setting up whole lockdowns. As much information as possible should be taken into account in these decisions and projections of the current situation into the future must be accurate. This is an over-whelming responsibility, not only morally but also technically, as they need to analyze a large number of scenarios and variables. Setting too loose lockdown rules or no lockdowns at all in particular stages might lead to many people losing their lives; on the other hand, imposing a full lockdown continuously is not a sustainable solution either, as it will have large economical consequences. 
+            <p>During a pandemic, decisions on interventions must be made to reduce or contain the disease spread, and they must be made fast. Public health officials must determine each following step, from closing schools to setting up full lockdowns. As much information as possible should be taken into account in these decisions and projections of the current situation into the future must be accurate. This is an over-whelming responsibility, not only morally but also technically, as they need to analyze a large number of scenarios and variables. Setting loose lockdown rules or no lockdowns at all in particular stages might lead to many people losing their lives; on the other hand, imposing a full lockdown continuously is not a sustainable solution either, as it will have large economical consequences. 
             </br>
             </br>
             In this website, you will find a tool that can support decision makers in making these hard decisions. There is a virtual environment to simulate the movements of the individuals in a closed grid and there is an agent, who is trained using Reinforcement Learning. It will try to predict how a decision maker should behave in this virtual environment to make sure the spread of the disease is reduced and the economic consequences are minimized. 
@@ -39,13 +39,15 @@
 
         <div class="section-title">
           <h2>Environment</h2>
-            <p>The virtual environment contains a population of 1000 people, in which, 0.7 of them are infectious. 
+            <p>The virtual environment contains a population of 1000 people, in which, 0.7 of them are infectious. It is is a challenging scenario because the infection is densely spread over the regions. The density of the environment is set to be 0.02. The expose rate is set to 10 and the death rate is set to 100. We assume that a person is infectious for 21 days and makes 8 movements per day.
             </br>
             </br>
             The policy is defined as how strict the lockdown should be. Policy 0 indicates a full lockdown, policy 1 indicates a 75% lockdown and policy 2 indicates a 50% lockdown.
             </br>
+            The decision makers goal is to find such a policy that will cause it to acquire the maximum possible economic reward. The reward function contains three parameters from the environment: the current economy ratio, the current cumulative death ratio, and the current percentage of active cases.
             </br>
-            The below counter showcases the day, the economic contribution of the population, number of active cases and deaths.The graphs represent the movement of people and their health status throughout 1 month corresponding to the day shown on the counter. </p>
+            </br>
+            The below counter showcases the day, the economic contribution of the population, number of active cases and deaths. The graphs represent the movement of people and their health status throughout 1 month corresponding to the day shown on the counter. </p>
               <div class="container">
                 <div class="row">
 
