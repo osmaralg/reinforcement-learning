@@ -12,7 +12,7 @@ Original file is located at
 import numpy as np
 #import sys
 #sys.path.append('c:/users/mahit/appdata/local/packages/pythonsoftwarefoundation.python.3.8_qbz5n2kfra8p0/localcache/local-packages/python38/site-packages')
-import tensorflow as tf
+
 import pandas as pd
 import random
 import json
@@ -28,7 +28,7 @@ economy = 0  # Daily economic transaction
 
 #Inputs
 s = 200 #size of the grid
-N = 1000 #size of population
+N = 100 #size of population
 M = round(N * 0.007) #Number of infectious population
 Et = 2 #Number of days staying exposed
 It = 21 #Number of days staying infectious
@@ -191,10 +191,10 @@ def rule(df):
     state = health_state(row_t)    
     if state[2] > 0:
         return "dead"
-    elif state[0] == 0:
-        return "healthy"
     elif state[3] > 0:
         return "susceptible"
+    elif state[0] == 0:
+        return "healthy"
     elif state[0] > 1:
         return "infectious"
     elif state[0] == 1:
@@ -255,11 +255,11 @@ def create_scatter_plot(df_total, reward, action):
 
 
 
-def simulate(df=init_state(), current_day=0):
+def simulate(model, tf, df=init_state(), current_day=0):
     # Use the agent to make decisions
     #import tensorflow as tf
     economy = 0
-    model = load_model("model_ann_3layer2.pb")
+    #model = load_model("model_ann_3layer2.pb")
     state = current_state(df)
     state = tf.reshape(state, [1, 6])
     prediction = model.predict(state, steps=1)
@@ -273,7 +273,7 @@ def simulate(df=init_state(), current_day=0):
 
 def calculate_reward_action(tf, model, df=init_state()):
     # calculate reward and action
-
+    #import tensorflow as tf
     #model = load_model("model_ann_3layer")
     economy = 0
     state = current_state(df)
