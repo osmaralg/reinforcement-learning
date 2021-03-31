@@ -449,7 +449,7 @@ In the future, we would like to continue training this model further and play ar
                 casesPlot.update({ 
                         series: [ {
                         name: 'Infectious',
-                        data: data['Infectious']
+                        data: data['Infectious'].splice(0,50)
                     }]
                 })
                 populationPlot.update({ 
@@ -495,7 +495,7 @@ In the future, we would like to continue training this model further and play ar
 
           playNext()
 
-        }, 2000);
+        }, 3000);
 
         };
 
