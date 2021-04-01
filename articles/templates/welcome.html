@@ -154,11 +154,34 @@
         <div class="section-title" data-aos="fade-up">
           <h2>Results</h2>
           <p>
-            The overall implementation is conducted using Python30, Keras31, and javascript. Results from the trained model are shown below. This represents changes in various metrics over 100 days for 1000 people. 
+            The overall implementation is conducted using Python30, Keras31, and javascript. Results from the trained model are shown below. This represents changes in various metrics over 60 days for 1000 people. 
           </br>
           </br>
           Please note that the newly infected cases are not included in the infectious cases.
         </p> 
+          </br>
+
+    <p> 
+        With a simple ANN model, we could already create an agent that gives reasonable policy recommendations. The total economical rewards achieved in an episode is larger than that without.
+    </p>
+          </br>
+
+    <p> 
+    
+    The training of the model with 1,000 population size already took up to 3-4 hours in the beginning. With the optimization of steps in the virtual environments, we decrease the training time down to 1-2 hours.
+    In the virtual environment, we can see that the pandemic cannot be controlled - we are only able to slow it down.  We would like to experiment in such a way that the we can find the most  effective way to decrease the density of infectious people in the population.
+</p>
+          </br>
+
+    <p> 
+
+    Density of the population played an important role in the spread of the COVID 19. With a smaller grid size, the number of infections would grow exponentially.
+</p>
+          </br>
+
+<p>
+In the future, we would like to continue training this model further and play around with the inputs. We would also like to implement the recurrent neural network used by the authors of the paper.
+</p>   
         </div>
 
         <!--
@@ -321,7 +344,7 @@
         var day = 1;
         var daysData = [];
         var paused = false;
-        var totalDays = 100;
+        var totalDays = 30;
         // Enviroment Dashboard
         var scatterPlot = ScatterPlot('State of the Pandemic', 'scatterContainer');
         var barPlot = BarPlot('barContainer')
@@ -426,37 +449,37 @@
                 casesPlot.update({ 
                         series: [ {
                         name: 'Infectious',
-                        data: data['Infectious']
+                        data: data['Infectious'].splice(0, 60)
                     }]
                 })
                 populationPlot.update({ 
                         series: [ {
                         name: 'Susceptible',
-                        data: data['Susceptible']
+                        data: data['Susceptible'].splice(0, 60)
                     }]
                 })
                 economyPlot.update({ 
                         series: [ {
                         name: 'Reward',
-                        data: data['Reward']
+                        data: data['Reward'].splice(0, 60)
                     }]
                 })
                 deadPlot.update({ 
                         series: [ {
                         name: 'Dead',
-                        data: data['Death Cases']
+                        data: data['Death Cases'].splice(0, 60)
                     }]
                 })
                 policyPlot.update({ 
                         series: [ {
                         name: 'Policy',
-                        data: data['Action']
+                        data: data['Action'].splice(0, 60)
                     }]
                 })
                 newDaylyPlot.update({ 
                         series: [ {
                         name: 'New Dayly Cases',
-                        data: data['Newly Infected']
+                        data: data['Newly Infected'].splice(0, 60)
                     }]
                 })
 
@@ -472,7 +495,7 @@
 
           playNext()
 
-        }, 2000);
+        }, 3000);
 
         };
 

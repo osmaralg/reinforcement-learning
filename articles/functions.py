@@ -120,11 +120,7 @@ def one_day(df, action=0):
                             df.at[index, 'Infectious'] = 1
                         else:
                             df.at[index, 'Infectious'] = person['Infectious'] + 1  # Increase the infectious day counter
-
-
                         # print(f'No. {index} infected {person.Infectious} in day {d} at {mt}')
-
-
                 elif person['Exposed'] > 0:  # If a person is in exposed state
 
                     if (person['Exposed'] - random.choice(range(0, 10))) >= Et:  # If the person has reached the exposed day limit?  7

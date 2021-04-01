@@ -1,4 +1,7 @@
 articles/migrations/*
+manage.py
 .idea/
-django_project
 env
+/manage.py
+articles/__pycache__/models.cpython-37.pyc
+

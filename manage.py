@@ -3,7 +3,9 @@
 import os
 import sys
 
-DEBUG = True
+
+DEBUG = True 
+
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_project.settings')
@@ -16,6 +18,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+
 
 def test():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
